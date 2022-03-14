@@ -10,17 +10,16 @@ env:
 permissions:
   id-token: write
 
-strategy:
-  matrix:
-    dir:
-      - hastags
-      - ingest
-      - visualise
-
 jobs:
-  up:
+  preview:
     name: Preview
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          - hastags
+          - ingest
+          - visualise
     steps:
       - uses: actions/checkout@v2
       - name: set bootstrap variables
