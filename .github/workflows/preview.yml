@@ -1,0 +1,44 @@
+name: Pulumi
+on:
+  push:
+    # branches:
+    #   - ${{ github.event.repository.default_branch }}
+
+env:
+  ENV: dev
+
+permissions:
+  id-token: write
+
+strategy:
+  matrix:
+    dir:
+      - hastags
+      - ingest
+      - visualise
+
+jobs:
+  up:
+    name: Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set bootstrap variables
+        id: bootstrap
+        run: |
+          pulumi login file://.
+          echo "::set-output name=cloud-url::$(
+            pulumi stack output --stack bootstrap-${{env.ENV}} 'bucket name'
+          )"
+          echo "::set-output name=secrets-provider::$(
+            pulumi stack output --stack bootstrap-${{env.ENV}} 'secret provider'
+          )"
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ''
+      - uses: pulumi/actions@v3
+        with:
+          command: preview
+          stack-name: ${{matrix.dir}}-${{env.ENV}}
+          work-dir: ${{matrix.dir}}
+          cloud-url: ${{steps.bootstrap.outputs.cloud-url}} 
+          secrets-provider: ${{steps.bootstrap.outputs.secrets-provider}} 

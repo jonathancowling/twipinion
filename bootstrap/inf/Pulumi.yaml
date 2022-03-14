@@ -1,0 +1,3 @@
+name: bootstrap
+runtime: go
+description: Deploys base resources to enable cicd pipelines to work
