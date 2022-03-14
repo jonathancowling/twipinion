@@ -73,12 +73,12 @@ func main() {
 		}
 
 		// Export the name of the bucket
-		ctx.Export("bucketName", bucket.BucketName.ApplyT(func(name *string) string {
+		ctx.Export("bucket name", bucket.BucketName.ApplyT(func(name *string) string {
 			return "s3://" + *name
 		}))
 		ctx.Export("OIDC", oidc.Url)
 		ctx.Export("secret provider", alias.AliasName.ApplyT(func(aliasStr string) string {
-			return "awskms://alias/" + aliasStr + "?region=" + region.Region
+			return "awskms://" + aliasStr + "?region=" + region.Region
 		}))
 		return nil
 	})
