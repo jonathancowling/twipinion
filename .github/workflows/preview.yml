@@ -32,8 +32,19 @@ jobs:
           echo "::set-output name=secrets-provider::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'secret provider'
           )"
+          echo "::set-output name=ci-role::$(
+            pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'
+          )"
+          
+          echo "::set-output name=region::$(
+            pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
+          )"
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{steps.bootstrap.outputs.ci-role}}
+          aws-region: ${{steps.bootstrap.outputs.region}}
       - uses: pulumi/actions@v3
         with:
           command: preview

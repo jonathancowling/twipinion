@@ -24,3 +24,6 @@ hs_err_pid*
 # local pulumi stacks
 /.pulumi/*
 !/.pulumi/stacks
+
+# vscode settings
+.vscode
