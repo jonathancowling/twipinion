@@ -26,7 +26,7 @@ func main() {
           "Sid": "Describe the policy statement",
           "Effect": "Allow",
           "Principal": map[string]interface{}{
-            "AWS": "arn:aws:iam::" + accountId.AccountId + ":user/admin",
+            "AWS": "arn:aws:iam::" + accountId.AccountId + ":user/cloud_user",
           },
           "Action": "kms:*",
           "Resource": "*",

@@ -4,7 +4,7 @@
         "stack": "bootstrap-dev",
         "latest": {
             "manifest": {
-                "time": "2022-03-14T10:52:51.768078Z",
+                "time": "2022-03-17T12:29:00.438797Z",
                 "magic": "3941cd8d8f96d38ddb61c5e4d852cb2b8f303c21d4cb1800bbf01ef47779cdfa",
                 "version": "v3.26.1"
             },
@@ -16,57 +16,107 @@
             },
             "resources": [
                 {
+                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "OIDC": "NS3u9CF94n2g3toiGKBiobKcw-wG81RObmWQgo.com",
+                        "bucket name": "s3://backend-bucket-f567d25",
+                        "secret provider": "awskms://alias/pulumi?region=us-east-1"
+                    },
+                    "sequenceNumber": 1
+                },
+                {
                     "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default",
                     "custom": true,
-                    "id": "93764566-49b4-49ae-a0b2-c621d6183fd6",
+                    "id": "130472fa-0bb5-4133-bb11-d80da397193a",
                     "type": "pulumi:providers:aws-native",
                     "inputs": {
-                        "region": "eu-west-2",
+                        "region": "us-east-1",
                         "version": "0.8.0"
                     },
                     "outputs": {
-                        "region": "eu-west-2",
+                        "region": "us-east-1",
                         "version": "0.8.0"
                     },
                     "sequenceNumber": 1
                 },
                 {
-                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
-                    "custom": false,
-                    "type": "pulumi:pulumi:Stack",
-                    "outputs": {
-                        "OIDC": "v9qTSJfv8G9HG9cGAl7Lp8XPY-yb8HLeqloP83.com",
-                        "bucket name": "s3://backend-bucket-d6db1ea",
-                        "secret provider": "awskms://alias/pulumi?region=eu-west-2"
+                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:iam:OIDCProvider::github-oidc",
+                    "custom": true,
+                    "id": "arn:aws:iam::362457278793:oidc-provider/NS3u9CF94n2g3toiGKBiobKcw-wG81RObmWQgo.com",
+                    "type": "aws-native:iam:OIDCProvider",
+                    "inputs": {
+                        "thumbprintList": []
                     },
+                    "outputs": {
+                        "__inputs": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:EMJrEC/iBZm4CtpR:S0yGh0Oo4dwaPOGYwx0431yBEX25rYk49fHhC71pPXdUH04huQ=="
+                        },
+                        "arn": "arn:aws:iam::362457278793:oidc-provider/NS3u9CF94n2g3toiGKBiobKcw-wG81RObmWQgo.com",
+                        "clientIdList": [],
+                        "tags": [],
+                        "thumbprintList": [],
+                        "url": "NS3u9CF94n2g3toiGKBiobKcw-wG81RObmWQgo.com"
+                    },
+                    "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
+                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::130472fa-0bb5-4133-bb11-d80da397193a",
+                    "propertyDependencies": {
+                        "thumbprintList": []
+                    },
+                    "sequenceNumber": 1
+                },
+                {
+                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:s3:Bucket::backend-bucket",
+                    "custom": true,
+                    "id": "backend-bucket-f567d25",
+                    "type": "aws-native:s3:Bucket",
+                    "inputs": {
+                        "bucketName": "backend-bucket-f567d25"
+                    },
+                    "outputs": {
+                        "__inputs": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:kw6DSMR76pcm9uso:fKvaK+m4o2GiZ3xm9+ArSH/4IEsZSFoIOOcXgELYHZqra1x+k2fNMp0w9zswQoZq9eYJEwMe5w=="
+                        },
+                        "arn": "arn:aws:s3:::backend-bucket-f567d25",
+                        "bucketName": "backend-bucket-f567d25",
+                        "domainName": "backend-bucket-f567d25.s3.amazonaws.com",
+                        "dualStackDomainName": "backend-bucket-f567d25.s3.dualstack.us-east-1.amazonaws.com",
+                        "regionalDomainName": "backend-bucket-f567d25.s3.us-east-1.amazonaws.com",
+                        "websiteURL": "http://backend-bucket-f567d25.s3-website-us-east-1.amazonaws.com"
+                    },
+                    "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
+                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::130472fa-0bb5-4133-bb11-d80da397193a",
                     "sequenceNumber": 1
                 },
                 {
                     "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:kms:Key::secret-key",
                     "custom": true,
-                    "id": "a69f9727-6dc8-4620-926f-bc66ea4e032d",
+                    "id": "f94fbaa2-7a51-482f-a494-d945d66ba8c2",
                     "type": "aws-native:kms:Key",
                     "inputs": {
                         "description": "secret key for pulumi",
-                        "keyPolicy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::230777506998:user/admin\"},\"Resource\":\"*\",\"Sid\":\"Describe the policy statement\"}],\"Version\":\"2012-10-17\"}"
+                        "keyPolicy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::362457278793:user/cloud_user\"},\"Resource\":\"*\",\"Sid\":\"Describe the policy statement\"}],\"Version\":\"2012-10-17\"}"
                     },
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:keZS06fEdTiA2B2c:6xpaNNPkOeeWqX4ZHBBxIsjeQEg1/P8E0zHjlJfiBjiWj7RJVv5rypqA12wpLKIS/LsrPExr3RHZ3hFeY7hO1yHYW/Vm8naz3O/DToQa+vWxqp1BLrMDji02k3NDs/N4s9HYvqnZTwUkX+RU2LFDfJWXHCv7FD53EsAi44ep7UTI7rZmias0TxrDIOY7dxjfUbAL3PoK1mkl0WjkeWoUET0p9jEr/5LSM1q4ENG+op9xD3RTPuSLhXdcKOfACtqiHBvhSSbCMsFJj7XvdDTZLlXGCra4hhrastnsceKU+nIMJ+yZZFV+kic0KyBAZTyvd2FwT7fpbOy2KBpGUnCu+cp/ZlkjfqSFUBdmM/1vfiPTGg7/twqm/Ge15Co="
+                            "ciphertext": "v1:cyKj1gWEjYMYs/ib:I25KEn6+YfvWEmL3WKsJF18hB0/hZ2OIjT20FVhRNKPPFM3+rrMT2H1oXvsmK4e7UgHSwPj3P4LT9r27UxuNqqKHT0+7PyRLZQ4kC8emhEM5tCBPERH/9T60dUFb+NYTGkocpiRZ2rDXVyG3A4FCxvuE2yFYdDrh390QwWS4YIklRvzZJxU19++o7v1HRi6UZWxPTT2EweYMkZ1Q0nuA2MWrmq5efonfX5pRE5BFMhxRNp64XXELYyuf3CPQ5A501rcOsfrDqauyDYxVWst0JgQOc7Ot9EW6CAu5DiB3NhfAQMDoC7kfSFsmxretuq1xUD9O/OxiaXCZd+ZR7dJ+vud7IhPJyHDuB5dAiNavirHzD8dR5WbAX67hB3TveW1LYA=="
                         },
-                        "arn": "arn:aws:kms:eu-west-2:230777506998:key/a69f9727-6dc8-4620-926f-bc66ea4e032d",
+                        "arn": "arn:aws:kms:us-east-1:362457278793:key/f94fbaa2-7a51-482f-a494-d945d66ba8c2",
                         "description": "secret key for pulumi",
                         "enableKeyRotation": false,
                         "enabled": true,
-                        "keyId": "a69f9727-6dc8-4620-926f-bc66ea4e032d",
+                        "keyId": "f94fbaa2-7a51-482f-a494-d945d66ba8c2",
                         "keyPolicy": {
                             "statement": [
                                 {
                                     "action": "kms:*",
                                     "effect": "Allow",
                                     "principal": {
-                                        "aWS": "arn:aws:iam::230777506998:user/admin"
+                                        "aWS": "arn:aws:iam::362457278793:user/cloud_user"
                                     },
                                     "resource": "*",
                                     "sid": "Describe the policy statement"
@@ -80,60 +130,10 @@
                         "tags": []
                     },
                     "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
-                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::93764566-49b4-49ae-a0b2-c621d6183fd6",
+                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::130472fa-0bb5-4133-bb11-d80da397193a",
                     "propertyDependencies": {
                         "description": [],
                         "keyPolicy": []
-                    },
-                    "sequenceNumber": 1
-                },
-                {
-                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:s3:Bucket::backend-bucket",
-                    "custom": true,
-                    "id": "backend-bucket-d6db1ea",
-                    "type": "aws-native:s3:Bucket",
-                    "inputs": {
-                        "bucketName": "backend-bucket-d6db1ea"
-                    },
-                    "outputs": {
-                        "__inputs": {
-                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:jHdJiajArNRFto4V:e8wK3MswRVUMNKVBG9BdW1+o8rVS2qQB66D1ntXK+yR/Fc4hr1Khpd/x/0vAiJDTdYr6aOoA+A=="
-                        },
-                        "arn": "arn:aws:s3:::backend-bucket-d6db1ea",
-                        "bucketName": "backend-bucket-d6db1ea",
-                        "domainName": "backend-bucket-d6db1ea.s3.amazonaws.com",
-                        "dualStackDomainName": "backend-bucket-d6db1ea.s3.dualstack.eu-west-2.amazonaws.com",
-                        "regionalDomainName": "backend-bucket-d6db1ea.s3.eu-west-2.amazonaws.com",
-                        "websiteURL": "http://backend-bucket-d6db1ea.s3-website.eu-west-2.amazonaws.com"
-                    },
-                    "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
-                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::93764566-49b4-49ae-a0b2-c621d6183fd6",
-                    "sequenceNumber": 1
-                },
-                {
-                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:iam:OIDCProvider::github-oidc",
-                    "custom": true,
-                    "id": "arn:aws:iam::230777506998:oidc-provider/v9qTSJfv8G9HG9cGAl7Lp8XPY-yb8HLeqloP83.com",
-                    "type": "aws-native:iam:OIDCProvider",
-                    "inputs": {
-                        "thumbprintList": []
-                    },
-                    "outputs": {
-                        "__inputs": {
-                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:8qNMK3c2GlTeAV/i:M6w20UA6PFyKqb0oXN9+Rmsy9F6SVOex7w9K66XkM0YvE0MD5g=="
-                        },
-                        "arn": "arn:aws:iam::230777506998:oidc-provider/v9qTSJfv8G9HG9cGAl7Lp8XPY-yb8HLeqloP83.com",
-                        "clientIdList": [],
-                        "tags": [],
-                        "thumbprintList": [],
-                        "url": "v9qTSJfv8G9HG9cGAl7Lp8XPY-yb8HLeqloP83.com"
-                    },
-                    "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
-                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::93764566-49b4-49ae-a0b2-c621d6183fd6",
-                    "propertyDependencies": {
-                        "thumbprintList": []
                     },
                     "sequenceNumber": 1
                 },
@@ -144,21 +144,21 @@
                     "type": "aws-native:kms:Alias",
                     "inputs": {
                         "aliasName": "alias/pulumi",
-                        "targetKeyId": "a69f9727-6dc8-4620-926f-bc66ea4e032d"
+                        "targetKeyId": "f94fbaa2-7a51-482f-a494-d945d66ba8c2"
                     },
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:v+lcCSu4UHVUQWLh:mzfWd4inyunaFzGOL+/SxcKxHusMcHt9Sb5Pn2gpQodDa5M53vOHod7XnBrl2jJ2tNPx7jPBOdbIpA2ZdQjfPViE+7AVA7XbCPU0d5Ww6VmeKW5GOCAjlnN3BkVxhoPKXQ=="
+                            "ciphertext": "v1:7mvr+Y9+rwCPCMCt:Ea3qaI6LgPmI19ltEnZbiAz1VvMS4KZxFRAaugtKERz+MXVO4Dg91QAjusVht4hIxZs+CwtOxKyn2jdIVkoxwziff5Bo5nxxnr4Y6CN8WhRNXRrNig9ypXyqzsmV0qLcPg=="
                         },
                         "aliasName": "alias/pulumi",
-                        "targetKeyId": "a69f9727-6dc8-4620-926f-bc66ea4e032d"
+                        "targetKeyId": "f94fbaa2-7a51-482f-a494-d945d66ba8c2"
                     },
                     "parent": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
                     "dependencies": [
                         "urn:pulumi:bootstrap-dev::bootstrap::aws-native:kms:Key::secret-key"
                     ],
-                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::93764566-49b4-49ae-a0b2-c621d6183fd6",
+                    "provider": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default::130472fa-0bb5-4133-bb11-d80da397193a",
                     "propertyDependencies": {
                         "targetKeyId": [
                             "urn:pulumi:bootstrap-dev::bootstrap::aws-native:kms:Key::secret-key"

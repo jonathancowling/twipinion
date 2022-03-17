@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         dir:
-          - hastags
+          # - hastags
           - ingest
-          - visualise
+          # - visualise
     steps:
       - uses: actions/checkout@v2
       - name: set bootstrap variables
@@ -38,6 +38,6 @@ jobs:
         with:
           command: preview
           stack-name: ${{matrix.dir}}-${{env.ENV}}
-          work-dir: ${{matrix.dir}}
+          work-dir: ${{matrix.dir}}/inf
           cloud-url: ${{steps.bootstrap.outputs.cloud-url}} 
           secrets-provider: ${{steps.bootstrap.outputs.secrets-provider}} 
