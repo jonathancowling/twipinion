@@ -81,7 +81,7 @@ jobs:
           aws-region: ${{steps.bootstrap.outputs.region}}
       - uses: pulumi/actions@v3
         with:
-          command: preview
+          command: up
           stack-name: ${{matrix.dir}}-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
           cloud-url: ${{steps.bootstrap.outputs.cloud-url}} 
