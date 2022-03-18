@@ -25,7 +25,7 @@ jobs:
       - name: set bootstrap variables
         id: bootstrap
         run: |
-          pulumi login file://.
+          pulumi login file://../..
           echo "::set-output name=cloud-url::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'bucket name'
           )"
@@ -35,16 +35,13 @@ jobs:
           echo "::set-output name=ci-role::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'
           )"
-
-          pushd bootstrap/inf
-            pulumi stack ls
-          popd
           
           echo "::set-output name=region::$(
             pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
           )"
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
+        working-directory: bootstrap/inf
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{steps.bootstrap.outputs.ci-role}}
