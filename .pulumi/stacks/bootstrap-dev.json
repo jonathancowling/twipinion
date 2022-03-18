@@ -4,7 +4,7 @@
         "stack": "bootstrap-dev",
         "latest": {
             "manifest": {
-                "time": "2022-03-18T10:46:40.020776Z",
+                "time": "2022-03-18T12:22:56.38275Z",
                 "magic": "3941cd8d8f96d38ddb61c5e4d852cb2b8f303c21d4cb1800bbf01ef47779cdfa",
                 "version": "v3.26.1"
             },
@@ -53,7 +53,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:RzT5EXd8iHivOicH:tLbmojSTQnjJB67aXYuD3cUrahx7CNhAvTbTLE6woqn0sf+07NTie4sKaM+EP59m9Wi234QbmQ=="
+                            "ciphertext": "v1:++9Gz5ZTD5xeY5j9:qCctdMeRtDrdtYIaiPgm9qH6DuPjT+vQZY7bC1/Sg8SNapxhHoCUO3lM86GxmCtaj90xls2jaQ=="
                         },
                         "arn": "arn:aws:s3:::backend-bucket-a5bdf9b",
                         "bucketName": "backend-bucket-a5bdf9b",
@@ -78,7 +78,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:zr6fo5exNVcKXop3:rpHMYdDPWdZl9bGlNF1MQfBCVnZokSh/v+8KBCgznHVhFyvm/D7nIvwIWzp/jjtS5eUSWlcmb9TJluq6QByP/KB5JR1EvJoyOs9xJkYBVHJYkiVg14fXutA3WMleR5b+eRAArydQMr9cYQBCBw80teb9+2Bs3yndNHzbQNbiLc57JlyVVbl1Jr7RajdHw/WLURTfUGjqmxDqRWXiSrJwnr+e7zHBzxjikIiAm1svm1vxqFEUARvZqEzlcWgVZhg6C2VRDS3KFNuACJ0OJv9qPp/JNwRmNdEYAe9V/XJZ2Q2CWts1B5MI09efRH7zFZ0NDCmYzqe7TSVtl4ySA0Qgu2IoKESSrFbQnXxGL8vyJRLCU3Mk+Zacow5WhS+xBpfKlw=="
+                            "ciphertext": "v1:HJfiCyAYlSVbENvm:9zUySezJO43BTG8u108AtpzpZ6O5yp0GbDYUds5MIzAjRQBbIhr5+El/nAZZ4fYgRFFhYfnxCnt8sUDJkBzHc1XWVT/YuCsku/p7Ie9kyt0XbpRD5IHOM2JSZ9ajFZSBOM8pLkw2ljlyHcbxGcdeai9x4/7Pc5ekawshy6yVSrMlPN2iP9VmZBB8yeG5Kvwpfu4x1HOhFMcHk6Z9q5wnrZAhfGPQmIWmdV/oCJJ1HAyJVqr4Ejr7WT8+SKGAdUhhLN75/6RGk1nD1vRZBWRG/mlorOSz32QFmH9I+aOeVAA61OF1QGbq2OvZQ+S8423t26RCz0IsLIPXpqaR8YkQhCWzu59TjE2+MdOq8QuuOI0Qhttpz3VfjBzfOQ1nCBEjuQ=="
                         },
                         "arn": "arn:aws:kms:us-east-1:634267044080:key/c41b89ec-d7a5-4ace-b112-8f7e7dd93874",
                         "description": "secret key for pulumi",
@@ -129,7 +129,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:wv49jg+4q9XAemTD:5L4dmkKHThOFuAzhMtNP75oK5zaTKF31HcmfloTgXkXiLGVMHC+EMXHl3gDGVtxYwNnv+Qw/gz9//rknrJ4XgtA/yjSuVYI9y205FwMhOEMT4j33hqSFFUjE9sME4RNQOXdTOouiHMBmO/vKDHFKhFyIyAHS3nvP3IgEuYO4d531kXDdothxa1EdCtuob0fPOXrDPPJnCuPkNirFvtXQVskMg2++HQkK"
+                            "ciphertext": "v1:69geRdsHNRZUZiYg:+W5LoJHyPetNIWBzNvrwfZGQm7uoBWC1d/OR0vxPQZYnZsAxYkQ6sccBkrBav7cvTBHTBmwwKPocqVXe1lxA2b3L89l95Os5FWeRtf9VTAWxDu2W6YgwWMB17ELX0Y1wOqxX/FDMKCQ9afCyf1desBWKiDMMJpx5vnFG1pGRMnhwnYzbkD8CFgupf7YLtJAOb1gZuwbM/Hy41AZjYB9b/4WZjSFY8t0g"
                         },
                         "arn": "arn:aws:iam::634267044080:oidc-provider/token.actions.githubusercontent.com",
                         "clientIdList": [
@@ -162,7 +162,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:5CWl/k423NUimUHC:7eT38Xp9vH2joPJc4aREfJO40difW6Kx98X2sFwA//M+zk0GsM6nBR/jY/XSSxDSfn+RlTjBee3zV/rF/Q+AJxqXEf9S6BZIdeHrCrnORiF6+NhCqvxnOTnDAZZ/qyxHjA=="
+                            "ciphertext": "v1:yFE5InH6SCGIHoF7:NSTevlTlCsK0OZDbAnhc9RjXsVeTj432i8VJRAhLX5+sWOCAztNV70JCjRNKRrRAg1CQe/u19MVAh4OGfImnHfXb+B7Z3W3JSBjnuOj0X2MikZzn0OXNrqCt1Wr1LPSxsw=="
                         },
                         "aliasName": "alias/pulumi",
                         "targetKeyId": "c41b89ec-d7a5-4ace-b112-8f7e7dd93874"
@@ -185,7 +185,7 @@
                     "id": "ci-role-437fc16",
                     "type": "aws-native:iam:Role",
                     "inputs": {
-                        "assumeRolePolicyDocument": "{\n\t\t\t\t\"Version\": \"2012-10-17\",\n\t\t\t\t\"Statement\": {\n\t\t\t\t\t\"Effect\": \"Allow\",\n\t\t\t\t\t\"Principal\": {\"Federated\": \"arn:aws:iam::634267044080:oidc-provider/token.actions.githubusercontent.com\"},\n\t\t\t\t\t\"Action\": \"sts:AssumeRoleWithWebIdentity\",\n\t\t\t\t\t\"Condition\": {\n\t\t\t\t\t\t\"ForAllValues:StringLike\": {\n\t\t\t\t\t\t  \"token.actions.githubusercontent.com:aud\": \"sts.amazonaws.com\",\n\t\t\t\t\t\t  \"token.actions.githubusercontent.com:sub\": \"repo:jonathancowling/twipinion\"\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}",
+                        "assumeRolePolicyDocument": "{\n\t\t\t\t\"Version\": \"2012-10-17\",\n\t\t\t\t\"Statement\": {\n\t\t\t\t\t\"Effect\": \"Allow\",\n\t\t\t\t\t\"Principal\": {\"Federated\": \"arn:aws:iam::634267044080:oidc-provider/token.actions.githubusercontent.com\"},\n\t\t\t\t\t\"Action\": \"sts:AssumeRoleWithWebIdentity\",\n\t\t\t\t\t\"Condition\": {\n\t\t\t\t\t\t\"StringLike\": {\n\t\t\t\t\t\t  \"token.actions.githubusercontent.com:aud\": \"sts.amazonaws.com\",\n\t\t\t\t\t\t  \"token.actions.githubusercontent.com:sub\": \"repo:jonathancowling/twipinion:*\"\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}",
                         "description": "IAM Role for CI servers to use",
                         "managedPolicyArns": [
                             "arn:aws:iam::aws:policy/IAMFullAccess",
@@ -200,7 +200,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:Nx0H61Lb76SDLupj:GqwRSRzQy8IFvbNiO9slkS4SMxH+Pbgdb61mAc87IUFYVvghkZ8lBxU+SZEW2tzL6ABA8XRZcGcyfZ3JAsv4nizfKdAae01DnYarbSxOEqy6fYVuxQ0ozsgLG8+3cbmXTGwBls4sZUt0JWWub5quTHTsAYYbEBUcCmqYo+qXTZgtQ7XcaQxbec56GFu06dIRpDmWEIQwzTo2BCQ8mWNfqsOTs7iQV24NSQEyvy8cyyMTT+MQMvqyoKvWPxfkn7wF/OTT3FwaTpWPlqdO0vE20ISdr7qz7uEVT/lytfOAq8OLGVLzPi6ckUwgKCRx37VCR+kD0p2WCNz/zXV/Asrpss3ThGzNZoHZONmFjlhF/NTVEBZWZYZ+iwjWRjVflzEH119EFotAoQIdSEsT4TVSc/iUYEANt3dgt9JS3tqaZjNurN2T0FEZi1W0AsRJE8aAxh2+HI48gIMWQIEWhrrinHJ6JuS6Ug6pNpR3uiE3kefAcl5M7hT6dTZkexOvBjl5j/vwTbXwdUbiTJvgyQoKkAQ58l/QUGmn7+ecLuvlkZceMExHLVm3keRX0eCr3oBjpKO3vMKn/17g0caCHuOkmvPa1iqeYEIl2/FEmMaU2zYWjiGiBeo1h+O8CZmuvWucT7i2SWY6wzun1PVtSk6pjkmOgL8/021VNUQLnZSKftM0Zk00Xm1o/NaqP5OyR+W3ZPpEQAnr9cGEafolHEyvPAP2wo4ZqT68TbJMGhRCadwcCAfRaL2DaPe5ijubyjmtJlJ4dFcT4DtcQ5XH2eiU9vaB4u6EXx3VGsJS3kPx2zV7YZXwldFUbLuM/BTNbZLkO5h9rd8kMtkZJCMIJqhyhh/LObBagNYPpAVFJLh6gmfKV4DwQtiWEJCgi+/3kHJDVK6xFHFmd0tVMhlRdopXAaMIV+uGEWHT6GrrHwDyYW4giqywo87LuwSFflLZfJqu6mdO4vGSb3QVzjKzp2gIQ2gPQxG1yOEk5/ShnlyxVnsnlQAcQNv1Tcc62+rhXrt7XG2wxQhB/CkhxOlUzXTT05DBgvnx/42ipUr3euQGH2fSB3yxV6oejQ5AN8p8R1cVdDE4A0ttyyEp8tEFzl44mWowTcC+YbxYvbo8e4DC3nud2abFQFQg/ooNKKO7+0siusj3exqUqoeSSUbIT8C3Tn3vNqY8F0gT41rth0ugbsFz/SyjepX07aPmuqNu/vnz/LnI0KRNS7SWsMyZ/f1CWrF+TwZKMIZadj+m4HnM5id754uNm1Vr+HyYmlPBCE0TXH17smwmS+jDg1ROGhePNtx2eCgGOW5Bwpwsik23V/sKdieqiLFOfb55RPt4yv4QmPFJhe09M6m6b5jwMV8="
+                            "ciphertext": "v1:42kzl1YMfLj4eSym:SfRJ+iHRpk+hjNUo1agZ/kL8Tk+f1+8XGHJ9wjC5zwrc+y0u1rwiKBszZXO1pjjFOC7sdmEVjh7fsUy+dXv0d662C81YEPiotcWaUb1hxLjqgotGiwAIZ0uHm1qhIeeSVHNoc/1o1ZYaqP33OqlCWpGNuoFq3s97v0rmikv/nbktAlc+P7k1c8sh2BKJ/geL3KDqURL/jcMuGEBzjqA24VYooc73b6CPEhWzI5F2WbjTqsgDMI0TCXbHgI7BWvu1sZufbP6KJUDopk9NLEOkeH6Ofsq/8gczg7cNxYz6phVJ6A5M1L0/sp4GjqA3lKEZ2NgBR6dapPL/sWr04RXgSvJmAWfcz//6F2MFFXSyJpthcn8YmFv+tgcnwdTfO9CEw0g+0XSnP2A9feaO8J7WWmjorFdTmJ6F9HwtmW7ccqzbrd8JUGqSrdLb2z5JriXhPaW+PEaG180BtHYdY9/MjFLBnx09PSorce1Ywse6UfiIxogGFfeUX5ILdehcZDf9+REUByWcR6fnsGvkprWrt25OTaXuAi6UNU/Yzt9EE4T+PYXzY32U3ZkQ6hdDMTIrXDVtL5vmVltKKbqHoUBJqqEyl87FVVqEsOOic2JDrZnJ6KoTSbc7vh0x9//IEc6ILx7iJbS3rKjWsaymjyHB5RWBiKtFc69pJfDYq3nVjPglhdExeENs+u1j4w21ggEl1jiy7Ccid9iTbKjRn3x489/5TNaI0n6RF/9a7wD1zeIt11LoGDgphTssORRwchjP2X6RyT3CPxvPOTnDCRBHP++l85w4nezmiNNC3++zgTGDdHDdFvj2er0YOkkrTPFcnQXYfkYfQPH+EdkfkKM2yBq4FxSz5kM9fg+AvdXH6Oa5dibkxXQo0jEoCrGa+LDQreAZCakPo70stJV8SbUOvDJBg9C0LYHQ0cAUAgWTSO84IzPM90lO36/nQ4CGVIi1ZKXhmVW5YSCGjVVYr3r4G7/2V81TKvbfyQbGI/kQXjAueGpG92f3ymFl4GbRtrw7o4Jrutm3PAN8U3ITG/Ur97etAKmDSbijyq/gbnwzkSSNs4YhYyQZUofAWT6Wfi6XkbyWk9h8oBcI6XncpM9KW5mLTlqkJFty7Nly/TOMF/Iq2FJy0wcf1P431BgvGeVHkBeMMWPIXbgPVWUAJl+aq8WlC13c1FqZL0P3yVTUJhZBnc6RLNqQoztkiYFFta1BhgY5u+Hl1lJum+MDm67gTHjhFtwScwx5t0PCpyKu1vJBMzxoll0j5uzzMJtwE6fHfwwOTaXz1Te45lbKzMY17yGvRZE6+ODs9FsBo7txnIslykcatk3kqWfOw7siEF596Ogq"
                         },
                         "arn": "arn:aws:iam::634267044080:role/ci-role-437fc16",
                         "assumeRolePolicyDocument": {
@@ -208,9 +208,9 @@
                                 {
                                     "action": "sts:AssumeRoleWithWebIdentity",
                                     "condition": {
-                                        "forAllValues:StringLike": {
+                                        "stringLike": {
                                             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-                                            "token.actions.githubusercontent.com:sub": "repo:jonathancowling/twipinion"
+                                            "token.actions.githubusercontent.com:sub": "repo:jonathancowling/twipinion:*"
                                         }
                                     },
                                     "effect": "Allow",

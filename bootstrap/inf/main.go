@@ -70,9 +70,9 @@ func main() {
 					"Principal": {"Federated": "` + arn + `"},
 					"Action": "sts:AssumeRoleWithWebIdentity",
 					"Condition": {
-						"ForAllValues:StringLike": {
+						"StringLike": {
 						  "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-						  "token.actions.githubusercontent.com:sub": "repo:` + conf.Require("repo") + `*"
+						  "token.actions.githubusercontent.com:sub": "repo:` + conf.Require("repo") + `:*"
 						}
 					}
 				}

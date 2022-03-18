@@ -36,9 +36,6 @@ jobs:
             pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'
           )"
 
-          pulumi stack ls
-          pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
-          
           echo "::set-output name=region::$(
             pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
           )"
