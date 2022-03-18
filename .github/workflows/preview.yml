@@ -36,8 +36,8 @@ jobs:
           path: ${{matrix.dir}}/app/target/${{matrix.dir}}-*-aws.jar
 
 
-  preview:
-    name: Preview
+  deploy:
+    name: Deploy
     needs: package
     runs-on: ubuntu-latest
     strategy:
