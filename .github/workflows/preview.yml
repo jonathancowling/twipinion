@@ -18,7 +18,7 @@ jobs:
       matrix:
         dir:
           # - hastags
-          - ingest
+          - ingester
           # - visualise
     steps:
       - uses: actions/checkout@v2
