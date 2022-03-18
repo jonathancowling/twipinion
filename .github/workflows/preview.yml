@@ -11,8 +11,34 @@ permissions:
   id-token: write
 
 jobs:
+  package:
+    name: Package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          # - hastags
+          - ingester
+          # - visualise
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build package
+        run: mvn --batch-mode package
+        working-directory: ${{matrix.dir}}/app
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jar
+          path: ${{matrix.dir}}/app/target/${{matrix.dir}}-*-aws.jar
+
+
   preview:
     name: Preview
+    needs: package
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,6 +51,10 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16'
+      - uses: actions/download-artifact@v3
+        with:
+          name: jar
+          path: ${{matrix.dir}}/app/target/
       - name: set bootstrap variables
         id: bootstrap
         run: |
