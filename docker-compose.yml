@@ -1,0 +1,42 @@
+# https://hub.docker.com/r/bitnami/kafka/
+
+version: "3.8"
+
+services:
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:3.7
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: docker.io/bitnami/kafka:3.1
+    ports:
+      - "29092:29092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+    depends_on:
+      - zookeeper
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest 
+    ports:
+      - "8081:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local

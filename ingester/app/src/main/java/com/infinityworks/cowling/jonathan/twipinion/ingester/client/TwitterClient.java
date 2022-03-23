@@ -2,20 +2,17 @@ package com.infinityworks.cowling.jonathan.twipinion.ingester.client;
 
 import java.net.URI;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilderFactory;
@@ -58,6 +55,7 @@ public class TwitterClient {
                     .retrieve()
                     .onStatus(s -> s.isError(), (r) -> r.createException())
                     .bodyToMono(TweetResponse.class)
+                    .delayElement(Duration.ofSeconds(1))
                     .blockOptional();
 
                 res.ifPresentOrElse(r -> sink.next(r), () -> sink.complete());
@@ -71,7 +69,7 @@ public class TwitterClient {
                     .orElse(null);
         })
             .flatMap(res -> Flux.just(res.toTweets().toArray((i) -> new Tweet[i])))
-            .bufferTimeout(25, Duration.parse(timeout));
+            .bufferTimeout(100, Duration.parse(timeout));
     }
 
     @lombok.Value
@@ -92,8 +90,9 @@ public class TwitterClient {
         @lombok.Value
         @JsonIgnoreProperties(ignoreUnknown = true)
         private static class Data {
+            String id;
             String text;
-            Entities entities;
+            Entities entities = new Entities();
             @JsonProperty("created_at")
             OffsetDateTime createdAt;
 
@@ -111,6 +110,7 @@ public class TwitterClient {
 
             private Tweet toTweet() {
                 return new Tweet(
+                        id,
                         text,
                         entities.getHashtags().stream().map(t -> t.getTag()).collect(Collectors.toList()),
                         createdAt);
@@ -124,6 +124,7 @@ public class TwitterClient {
 
     @lombok.Value
     public static class Tweet {
+        String id;
         String text;
         List<String> hashtags;
         OffsetDateTime createdAt;

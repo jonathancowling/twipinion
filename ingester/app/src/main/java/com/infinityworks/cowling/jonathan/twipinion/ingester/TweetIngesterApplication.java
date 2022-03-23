@@ -1,8 +1,10 @@
 package com.infinityworks.cowling.jonathan.twipinion.ingester;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.function.Supplier;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,6 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilderFactory;
@@ -61,9 +64,19 @@ public class TweetIngesterApplication {
 	}
 
 	@Bean
-	public Supplier<Flux<Tweet>> test(@Autowired TwitterClient twitter, @Autowired ObjectMapper mapper) {
+	public Supplier<Flux<Tweet>> test(
+		@Autowired TwitterClient twitter,
+		@Autowired ObjectMapper mapper,
+		@Autowired KafkaTemplate<String, String> kafka
+	) {
 		return () -> {
-			return twitter.recent().flatMapIterable((l) -> l);
+			return twitter.recent().take(Duration.ofMinutes(1)).flatMapIterable((l) -> l).doOnNext(tweet -> {
+				try {
+					kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+			});
 		};
 	}
 }

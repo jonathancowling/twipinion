@@ -1,4 +1,14 @@
+spring.kafka:
+  admin.fail-fast: true
+  client-id: spring
+  bootstrap-servers: localhost:29092
+  producer:
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  template.default-topic: tweets
+
 config:
+  # kafka.bootstrapAddress: 127.0.0.1:9092
   timeout: PT10S
   twitter.uri: https://api.twitter.com
   twitter.bearer: ''
