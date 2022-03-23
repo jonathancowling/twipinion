@@ -1,1 +1,14 @@
-
+config:
+  timeout: PT10S
+  twitter.uri: https://api.twitter.com
+  twitter.bearer: ''
+  twitter.query: >-
+    lang:en
+    -is:retweet
+    (
+      from:Accenture OR @Accenture OR to:Accenture
+      OR from:AccentureUK OR @AccentureUK OR to:AccentureUK
+      OR from:AccentureTech OR @AccentureTech OR to:AccentureTech
+      OR from:AccentureOps OR @AccentureOps OR to:AccentureOps
+      OR from:AccentureSecure OR @AccentureSecure OR to:AccentureSecure
+    )
