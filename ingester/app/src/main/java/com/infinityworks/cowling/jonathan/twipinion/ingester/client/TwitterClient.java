@@ -1,7 +1,9 @@
 package com.infinityworks.cowling.jonathan.twipinion.ingester.client;
 
 import java.net.URI;
+import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +30,9 @@ public class TwitterClient {
     @Value("${config.twitter.uri}")
     private String uri;
 
+    @Value("${config.twitter.within}")
+    private String within;
+
     @Value("${config.twitter.query}")
     private String query;
 
@@ -40,12 +45,18 @@ public class TwitterClient {
     @Autowired
     private UriBuilderFactory uriBuilder;
 
+    @Autowired
+    private Clock clock;
+
     public Flux<List<Tweet>> recent() {
+
+        String startTime = Instant.now(clock).minus(Duration.parse(within)).toString();
 
         return Flux.generate(
             () -> uriBuilder.uriString(uri)
                 .path("/2/tweets/search/recent")
                 .queryParam("tweet.fields", "created_at,entities")
+                .queryParam("start_time", startTime)
                 .queryParam("query", query)
                 .build(),
             (URI recentTweetsUri, SynchronousSink<TweetResponse> sink) -> {
@@ -63,6 +74,7 @@ public class TwitterClient {
                 return res.map(r -> uriBuilder.uriString(uri)
                     .path("/2/tweets/search/recent")
                     .queryParam("tweet.fields", "created_at,entities")
+                    .queryParam("start_time", startTime)
                     .queryParam("query", query)
                     .queryParamIfPresent("next_token", Optional.ofNullable(r.getMeta().nextToken))
                     .build())

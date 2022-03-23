@@ -1,3 +1,4 @@
+spring.application.name: ingester
 spring.kafka:
   admin.fail-fast: true
   client-id: spring
@@ -7,9 +8,16 @@ spring.kafka:
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
   template.default-topic: tweets
 
+aws.paramstore.enabled: true
+aws.paramstore.fail-fast: true
+aws.paramstore.prefix: /config
+# secrets at /{prefix}/{name}{separator}{profile}/{property}
+# see https://docs.spring.io/spring-cloud-aws/docs/current/2.2.6.RELEASE/reference/html/appendix.html
+
+
 config:
-  # kafka.bootstrapAddress: 127.0.0.1:9092
   timeout: PT10S
+  twitter.within: PT1H
   twitter.uri: https://api.twitter.com
   twitter.bearer: ''
   twitter.query: >-
