@@ -20,7 +20,7 @@ func main() {
 		_, err = ssm.NewParameter(ctx, "twitter-bearer-parameter", &ssm.ParameterArgs{
 			Name: pulumi.String("/config/ingester-dev/TWITTER_BEARER"),
 			Type:  pulumi.String("SecureString"),
-			Value: pulumi.String(env["TWITTER_BEARER"]),
+			Value: pulumi.String(env["TWITTER_BEARER"]), // TODO: check pulumi secret docs to see if this is secure
 		})
 		if err != nil {
 			return err

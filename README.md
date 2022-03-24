@@ -3,6 +3,13 @@ Visualise a brands public perception
 
 # Getting Started
 
+1. Deploy bootstrap projects:
+    1. /bootstrap (local backend)
+    2. /ingester/bootstrap (s3 backend)
+2. Init stacks (TODO: automate this)
+    1. /injester/inf
+
+
 # Bootstrapping
 
 To get all the infrastructure up and running for the first time see the bootstrap project.
