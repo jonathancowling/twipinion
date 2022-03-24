@@ -58,7 +58,7 @@ jobs:
       - name: set bootstrap variables
         id: bootstrap
         run: |
-          pulumi login file://../..
+          pulumi login file://..
           echo "::set-output name=cloud-url::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'bucket name'
           )"
