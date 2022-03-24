@@ -75,6 +75,7 @@ func main() {
 			Environment: &lambda.FunctionEnvironmentArgs{
 				Variables: pulumi.StringMap{
 					"FUNCTION_NAME": pulumi.String("test"),
+					"SPRING_PROFILES_ACTIVE": pulumi.String("dev"),
 				},
 			},
 			MemorySize: pulumi.Int(512),

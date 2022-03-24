@@ -19,7 +19,7 @@ config:
   timeout: PT10S
   twitter.within: PT1H
   twitter.uri: https://api.twitter.com
-  twitter.bearer: ''
+  twitter.bearer: ${TWITTER_BEARER}
   twitter.query: >-
     lang:en
     -is:retweet
@@ -30,3 +30,7 @@ config:
       OR from:AccentureOps OR @AccentureOps OR to:AccentureOps
       OR from:AccentureSecure OR @AccentureSecure OR to:AccentureSecure
     )
+
+---
+spring.config.activate.on-profile: dev
+spring.config.import: optional:file:.env.dev[.properties]
