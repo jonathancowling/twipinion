@@ -44,6 +44,7 @@ func main() {
 				AssumeRolePolicy: pulumi.String(policy),
 				ManagedPolicyArns: pulumi.ToStringArrayOutput([]pulumi.StringOutput{
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/AWSLambdaExecute").ToStringOutput(),
+					iam.ManagedPolicy("arn:aws:iam::aws:policy/CloudWatchLogsFullAccess").ToStringOutput(),
 				}),
 
 			},
@@ -80,6 +81,7 @@ func main() {
 			},
 			MemorySize: pulumi.Int(512),
 			Description: pulumi.String(pomFile.Description),
+			Timeout: pulumi.Int(120),
 		})
 		if err != nil {
 			return err
