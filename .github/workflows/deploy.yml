@@ -74,7 +74,7 @@ jobs:
           )"
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
-        working-directory: bootstrap/inf
+        working-directory: bootstrap
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{steps.bootstrap.outputs.ci-role}}
