@@ -45,6 +45,7 @@ func main() {
 				ManagedPolicyArns: pulumi.ToStringArrayOutput([]pulumi.StringOutput{
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/AWSLambdaExecute").ToStringOutput(),
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/CloudWatchLogsFullAccess").ToStringOutput(),
+					iam.ManagedPolicy("arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess").ToStringOutput(),
 				}),
 
 			},
