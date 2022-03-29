@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(
 	properties = {
-		"TWITTER_BEARER="
+		"config.twitter.bearer="
 	}
 )
 class TweetIngesterApplicationTests {
