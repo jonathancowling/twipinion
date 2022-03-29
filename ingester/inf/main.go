@@ -79,19 +79,18 @@ func main() {
 					"FUNCTION_NAME": pulumi.String("test"),
 					"SPRING_PROFILES_ACTIVE": pulumi.String("dev"),
 					"SPRING_CLOUD_BOOTSTRAP_NAME": pulumi.String("bootstrap_dev"),
-					"LOGGING_LEVEL_ROOT": pulumi.String("DEBUG"),
 				},
 			},
 			MemorySize: pulumi.Int(512),
 			Description: pulumi.String(pomFile.Description),
-			Timeout: pulumi.Int(120),
+			Timeout: pulumi.Int(300),
 		})
 		if err != nil {
 			return err
 		}
 
 		rule, err := cloudwatch.NewEventRule(ctx, pomFile.ArtifactId + "-schedule", &cloudwatch.EventRuleArgs{
-			ScheduleExpression: pulumi.String("rate(5 minutes)"),
+			ScheduleExpression: pulumi.String("rate(15 minutes)"),
 			Description: pulumi.String("Schedule tweet ingest"),
 		})
 		if err != nil {
