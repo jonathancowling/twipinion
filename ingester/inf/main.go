@@ -81,7 +81,7 @@ func main() {
 					"SPRING_CLOUD_BOOTSTRAP_NAME": pulumi.String("bootstrap_dev"),
 				},
 			},
-			MemorySize: pulumi.Int(512),
+			MemorySize: pulumi.Int(1024),
 			Description: pulumi.String(pomFile.Description),
 			Timeout: pulumi.Int(300),
 		})
