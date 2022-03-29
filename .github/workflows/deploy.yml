@@ -82,7 +82,7 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: ${{matrix.dir}}-${{env.ENV}}
+          stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
           cloud-url: ${{steps.bootstrap.outputs.cloud-url}} 
           secrets-provider: ${{steps.bootstrap.outputs.secrets-provider}} 

@@ -23,18 +23,22 @@ popd
 pulumi login "${BUCKET}"
 
 for APPLICATION in "ingester" "hashtags" "visualise"; do
-  DEPLOYMENT="bootstrap"
-  if [ -d "./${APPLICATION}/${DEPLOYMENT}/" ]; then
-    pushd "${APPLICATION}/${DEPLOYMENT}"
-      # setting backup for GNU & BSD compatability
-      sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
-      rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
-      pulumi stack init --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}" --secrets-provider "${SECRETS_PROVIDER}"
-      pulumi up --yes --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}"
-    popd
-  else
-    echo "${APPLICATION}/${DEPLOYMENT} does not exist or is not a directory, skipping ${DEPLOYMENT}..." >&2
-  fi
+  for DEPLOYMENT in "bootstrap" "inf"; do
+    if [ -d "./${APPLICATION}/${DEPLOYMENT}/" ]; then
+        pushd "${APPLICATION}/${DEPLOYMENT}"
+        # setting backup for GNU & BSD compatability
+        sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
+        rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
+        pulumi stack init --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}" --secrets-provider "${SECRETS_PROVIDER}"
+        # only bootstrap deployments should be deployed manually
+        if [ "$DEPLOYMENT" == "bootstrap" ]; then
+          pulumi up --yes --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}"
+        fi
+        popd
+    else
+        echo "${APPLICATION}/${DEPLOYMENT} does not exist or is not a directory, skipping ${DEPLOYMENT}..." >&2
+    fi
+  done
 done
 
 echo "bootstrap complete." >&2

@@ -1,0 +1,6 @@
+secretsprovider: awskms://alias/pulumi?region=us-east-1
+secretsprovider: awskms://alias/pulumi?region=us-east-1
+encryptedkey: AQICAHieCo0kgu5+w9pc9qc8yCH27k3MHgfI8p8APVHNt739aAGioom5gr38mn0j6iIIk4adAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMb4UX/KiJOwCSYzwZAgEQgDtZzGcahKzR2YZ7hE94CTTTvQYflOqwMTE8I9XukFgjjEtl9+ROGT8Yp+E6a9j3ktZvBLlS2H5WPjshCw==
+config:
+  aws-native:region: us-east-1
+  aws:region: us-east-1
