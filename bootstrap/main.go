@@ -129,7 +129,7 @@ func main() {
 			}))
 			return out
 		})
-		ctx.Export("secret provider", alias)
+		ctx.Export("secrets provider", alias)
 
 		// Export the name of the bucket
 		ctx.Export("bucket name", bucket.BucketName.ApplyT(func(name *string) string {

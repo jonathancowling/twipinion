@@ -31,6 +31,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### dotenv ###
-/src/main/resources/.env.*
-!/src/main/resources/.env.sample
+### Config Server Secrets ###
+/src/main/resources/configserver/*
+!/src/main/resources/configserver/sample

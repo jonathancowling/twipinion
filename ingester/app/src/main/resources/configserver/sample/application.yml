@@ -1,0 +1,8 @@
+# IMPORTANT
+#
+# Configserver yaml files can't be flattened like spring property yaml files in general                       
+# because they are also required by the bootstrap step to put variables in the secret store in the first place
+
+config:
+  twitter:
+    bearer: bearer token

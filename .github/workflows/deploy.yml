@@ -63,7 +63,7 @@ jobs:
             pulumi stack output --stack bootstrap-${{env.ENV}} 'bucket name'
           )"
           echo "::set-output name=secrets-provider::$(
-            pulumi stack output --stack bootstrap-${{env.ENV}} 'secret provider'
+            pulumi stack output --stack bootstrap-${{env.ENV}} 'secrets provider'
           )"
           echo "::set-output name=ci-role::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'

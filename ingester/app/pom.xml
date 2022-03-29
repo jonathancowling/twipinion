@@ -15,6 +15,8 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.1</spring-cloud.version>
+		<spring-cloud-config.version>3.1.1</spring-cloud-config.version>
+		<spring-cloud-aws.version>2.2.6.RELEASE</spring-cloud-aws.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -26,8 +28,20 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-ssm</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-function-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -36,7 +50,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-lambda-java-events</artifactId>
-			<version>3.11.0</version> <!-- TODO: update -->
+			<version>3.11.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -44,10 +58,6 @@
 			<artifactId>aws-lambda-java-core</artifactId>
 			<version>1.2.1</version>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-aws-parameter-store-config</artifactId>
 		</dependency>
 
 		<dependency>
@@ -100,8 +110,15 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-config-dependencies</artifactId>
+				<version>${spring-cloud-config.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-aws-dependencies</artifactId>
-				<version>2.2.6.RELEASE</version>
+				<version>${spring-cloud-aws.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -146,6 +163,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+			<directory>src/main/resources</directory>
+			<excludes>
+				<exclude>configserver</exclude>
+			</excludes>
+			</resource>
+		</resources>
 	</build>
 
 </project>

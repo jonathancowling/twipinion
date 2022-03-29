@@ -77,6 +77,7 @@ func main() {
 				Variables: pulumi.StringMap{
 					"FUNCTION_NAME": pulumi.String("test"),
 					"SPRING_PROFILES_ACTIVE": pulumi.String("dev"),
+					"SPRING_CLOUD_BOOTSTRAP_NAME": pulumi.String("bootstrap_dev"),
 					"LOGGING_LEVEL_ROOT": pulumi.String("DEBUG"),
 				},
 			},
