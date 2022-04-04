@@ -40,7 +40,6 @@ jobs:
       cloud-url: ${{steps.bootstrap.cloud-url}}
       secrets-provider: ${{steps.bootstrap.secrets-provider}}
       aws-role: ${{steps.bootstrap.aws-role}}
-      cloud-url: ${{steps.bootstrap.cloud-url}}
       aws-region: ${{steps.bootstrap.aws-region}}
     steps:
       - uses: actions/checkout@v2
