@@ -55,10 +55,12 @@ func main() {
 			}
 
 			subnet, err := ec2.NewSubnet(ctx, "subnet-" + zone,  &ec2.SubnetArgs{
-				VpcId: vpc.ID(),
-				AvailabilityZone: pulumi.String(zone),
-				CidrBlock: pulumi.String(subnetCidr.String()),
-			})
+					VpcId: vpc.ID(),
+					AvailabilityZone: pulumi.String(zone),
+					CidrBlock: pulumi.String(subnetCidr.String()),
+				},
+				pulumi.DeleteBeforeReplace(true),
+		    )
 			subnets[i] = subnet.ID()
 			if err != nil {
 				return err
