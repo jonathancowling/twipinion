@@ -49,7 +49,8 @@ func main() {
 
 		subnets := make([]pulumi.IDOutput, len(zoneNames))
 		for i, zone := range zoneNames {
-			subnetCidr, err := cidr.Subnet(network, 8, i)
+			// FIXME: temporarily shift the zones to support recreation without deletion
+			subnetCidr, err := cidr.Subnet(network, 8, i + len(zoneNames))
 			if err != nil {
 				return err
 			}
@@ -59,7 +60,6 @@ func main() {
 					AvailabilityZone: pulumi.String(zone),
 					CidrBlock: pulumi.String(subnetCidr.String()),
 				},
-				pulumi.DeleteBeforeReplace(true),
 		    )
 			subnets[i] = subnet.ID()
 			if err != nil {
