@@ -69,9 +69,8 @@ jobs:
     name: Deploy Shared
     needs: bootstrap
     runs-on: ubuntu-latest
-    concurrency: 
-      group: shared
     strategy:
+      max-parallel: 1
       matrix:
         dir:
           - shared-network
