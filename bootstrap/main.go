@@ -72,6 +72,7 @@ func main() {
 				"arn:aws:iam::aws:policy/AWSCloudFormationFullAccess",
 				"arn:aws:iam::aws:policy/AWSLambda_FullAccess",
 				"arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+				"arn:aws:iam::aws:policy/AmazonMSKFullAccess",
 			}),
 		})
 		if err != nil {
