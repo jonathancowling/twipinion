@@ -13,7 +13,15 @@ import (
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		
-		zones, err := aws.GetAvailabilityZones(ctx, nil)
+		zones, err := aws.GetAvailabilityZones(ctx, &aws.GetAvailabilityZonesArgs{
+			ExcludeNames: []string { "us-east-1e" },
+			Filters: []aws.GetAvailabilityZonesFilter{
+				&aws.GetAvailabilityZonesFilter{
+					Name: "zone-type",
+					Values: []string{ "availability-zone" },
+				},
+			},
+		})
 
 		if err != nil {
 			return err

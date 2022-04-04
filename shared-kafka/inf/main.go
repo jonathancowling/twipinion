@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/msk"
 	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/ec2"
+	"github.com/pulumi/pulumi-aws/sdk/v5/go/aws/msk"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
@@ -73,36 +73,6 @@ func main() {
 
 		ctx.Export("Zookeeper Connect String", cluster.ZookeeperConnectString)
 		ctx.Export("Bootstrap Brokers TLS", cluster.BootstrapBrokersTls)
-
-		// pulumi.All(
-		// 	network.GetOutput(pulumi.String("Subnet IDs")),
-		// 	sg.ID(),
-		// ).ApplyT(func (ids interface{}, sg string) (interface {}) {
-		// 	subnets := make([]string, len(ids.([]interface{})))
-		// 	for i, id := range ids.([]interface{}) {
-		// 		subnets[i] = id.(string)
-		// 	}
-
-		// 	cluster, e := msk.NewCluster(ctx, "kafka", &msk.ClusterArgs{
-		// 		KafkaVersion:        pulumi.String("2.8.1"),
-		// 		NumberOfBrokerNodes: pulumi.Int(2),
-		// 		BrokerNodeGroupInfo: &msk.ClusterBrokerNodeGroupInfoArgs{
-		// 			InstanceType: pulumi.String("kafka.t3.small"),
-		// 			ClientSubnets: pulumi.ToStringArray(subnets),
-		// 			EbsVolumeSize: pulumi.Int(1),
-		// 			SecurityGroups: pulumi.ToStringArray([]string{ sg }),
-		// 		},
-		// 	})
-		// 	ctx.Export("Zookeeper Connect String", cluster.ZookeeperConnectString)
-		// 	ctx.Export("Bootstrap Brokers Tls", cluster.BootstrapBrokersTls)
-
-		// 	if e != nil {
-		// 		err = e
-		// 		return nil
-		// 	}
-
-		// 	return nil
-		// })
 
 		return nil
 	})
