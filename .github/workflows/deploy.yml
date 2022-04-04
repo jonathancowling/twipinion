@@ -40,7 +40,7 @@ jobs:
       cloud-url: ${{steps.bootstrap.cloud-url}}
       secrets-provider: ${{steps.bootstrap.secrets-provider}}
       aws-role: ${{steps.bootstrap.aws-role}}
-      aws-region: ${{steps.bootstrap.aws-region}}
+      aws_region: ${{steps.bootstrap.aws-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16'
-      - run: echo ${{needs.bootstrap.outputs.aws-region}} ${{needs.bootstrap.outputs.ci-role}}
+      - run: echo ${{ needs.bootstrap.outputs.aws_region }} ${{ needs.bootstrap.outputs.ci-role }}
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
