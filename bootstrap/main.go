@@ -71,6 +71,7 @@ func main() {
 				"arn:aws:iam::aws:policy/CloudWatchEventsFullAccess",
 				"arn:aws:iam::aws:policy/AWSCloudFormationFullAccess",
 				"arn:aws:iam::aws:policy/AWSLambda_FullAccess",
+				"arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess",
 			}),
 		})
 		if err != nil {

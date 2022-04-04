@@ -4,7 +4,7 @@
         "stack": "bootstrap-dev",
         "latest": {
             "manifest": {
-                "time": "2022-04-04T14:23:05.437841+01:00",
+                "time": "2022-04-04T14:47:27.483689+01:00",
                 "magic": "568473a2eca536a7e8d600444aa57b4c9fa16b4ee98825be896ac6d73de5da84",
                 "version": "v3.28.0"
             },
@@ -15,18 +15,6 @@
                 }
             },
             "resources": [
-                {
-                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
-                    "custom": false,
-                    "type": "pulumi:pulumi:Stack",
-                    "outputs": {
-                        "OIDC": "token.actions.githubusercontent.com",
-                        "bucket name": "s3://backend-bucket-65093fc",
-                        "ci role": "arn:aws:iam::690622335846:role/ci-role-da0e98b",
-                        "secrets provider": "awskms://alias/pulumi?region=us-east-1"
-                    },
-                    "sequenceNumber": 1
-                },
                 {
                     "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:providers:aws-native::default",
                     "custom": true,
@@ -43,6 +31,18 @@
                     "sequenceNumber": 1
                 },
                 {
+                    "urn": "urn:pulumi:bootstrap-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-dev",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "OIDC": "token.actions.githubusercontent.com",
+                        "bucket name": "s3://backend-bucket-65093fc",
+                        "ci role": "arn:aws:iam::690622335846:role/ci-role-da0e98b",
+                        "secrets provider": "awskms://alias/pulumi?region=us-east-1"
+                    },
+                    "sequenceNumber": 1
+                },
+                {
                     "urn": "urn:pulumi:bootstrap-dev::bootstrap::aws-native:s3:Bucket::backend-bucket",
                     "custom": true,
                     "id": "backend-bucket-65093fc",
@@ -53,7 +53,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:0mP6VDEOcF1H7Jjy:apcwgIpSyA2Mbt9yIuYF4+Rb4UJLbdnh+YK//aopTOkJ/RrSPuentGc9WlFuv5yLvwQrRz6beQ=="
+                            "ciphertext": "v1:MKR5Otem7WIBEIsx:mMvAz6Dc3naf/cZQPhVFtacTli3ifvqsXYqC2PkvhoS45r9cy7hiptCj8jEl9T7r0jr5IpLnoQ=="
                         },
                         "arn": "arn:aws:s3:::backend-bucket-65093fc",
                         "bucketName": "backend-bucket-65093fc",
@@ -83,7 +83,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:m00/m2ZOt7h8F/ec:Dp01TkXOfbyPUqJEnEGYqKt/ZUG8L11UTSgYLTmntfqdgLzUt86Rmm9iDn/td0kDTfFNxW5sN1I5vBFJ8Uv20YWNkc2bwHh3uXaxxRZCKqFbBJCynx5o188Ej91pZ26YAh/pq5Iw03luOl9JVra9PgL4QlGyOLu2MHXRdFL9uGb24E0Z6LLsgEEzZSMwtgpDfB3iUVMG9u0JDzRBryF8chfJRa+5CBdo"
+                            "ciphertext": "v1:fLHTKeg6I5moPmDq:/K+tr0z7NnAyZCdWsoUhId4iyCYGG/bnggRhio5GR2yqtaZtuCxSMRq0vJE0FP0MbncDmyzNtUswRDFdKXOZNtSiBgU2+p2Lel9+e+eQ+zdTQ287vxd0kcGFmbU6OOBlaeqES4AE+FsXuaPHQ6D5CRvSm1ov68W2OfW6rAu02/eKKKLf06xNdrRUvFih+/6stWD5dpRUZe/g2HZQxkdEi3cQ3pVhOtA2"
                         },
                         "arn": "arn:aws:iam::690622335846:oidc-provider/token.actions.githubusercontent.com",
                         "clientIdList": [
@@ -118,14 +118,15 @@
                             "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser",
                             "arn:aws:iam::aws:policy/CloudWatchEventsFullAccess",
                             "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess",
-                            "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+                            "arn:aws:iam::aws:policy/AWSLambda_FullAccess",
+                            "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
                         ],
                         "roleName": "ci-role-da0e98b"
                     },
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:zgE63raaubo09Rpt:H+aGMl4MQ4M8HqWK6KKk/GPPh9n1M5kzWOsVtN+eUNonBXYcF6IVr+3q6fnv2gP3KcIXm+ylPeVWIJqbjSYOvC25R5S8NEbVB6yXuxaXMw9AoZEonvIjXJy5RjvbZGdFhs3qT7s6zA5MKNWjvWgr3EkQbOd3Jq18qtuMGdbt64uVGghnCHEuPICEkx5VGKjB5U/ddcH7sRSrdlDRnz08WYJafaU+deyiaFV4UNCEu5poP2xRxq08d23uUJtnXtlpe91q30L2W+GghwkIfNdEt/iUReHv2Xz3OswnEmb+/CzZPLdTIBBC+I9LggyB3Njgyst3GFreeCA/EL6M6qxeE2LZr1dUya2diuzUMMxWOlskqFoyUtK7ZyMc/Mgq2w/ndsgiIJotwoq5FeFRMHmNSPqefCwC0i4Wu5+ITbrN1/EbXmcICYyWD2Nk615Hw9731cU3GFvDEZ4R20BhGe+XIDfEztMdP6+dxUZDvkOOc7ZvVC7/NJV4cX/d/m9VFSQ0lD8ZSO5DGtOLAINZu5f/sbMQxVVZKk9ijTOEacmyMkVTrLfVnB3Ozjh22w/L7xXZuIMZ/JBd/13rGjD3R+6GosigfLno85zygNMloEQlw8kVtI4Y4uIDoNB6DSeB+pyUZVHodDHVHupOBcURfvLSnMAGk2LUEnUJLAac0lbUqkOJCRXTzF0m+kS12X6MmS7qq9h/am8gfP+Uz7hHV9as7y785eAijvUte37aE5l2JkuTrmMSVBlMTamXwcWCIRT0XnRXYOw23aZGcsju6ykajIHCgdU37qbGpmje/Ut1X7Bkv70w8hrKTbSHyj+KtPtP8s4ph3z0U5IX9Arr4EIec1zr5vkC3h5eXS7Sr0SZYR2z8gkgVd/dG7RBgJVfSznk0Oa+V6TpLMpf5W5TrjDPr3i88oN5mwoEpSRnHR0mFKoVXm8Z+uWv7089uO3rJwUbL5zZhnMKXApfkjVH684mJhFxLalRIVPdgtwoP/DJWnLyeQPD1tTyynLY0w5c6REVlxPQBNw0n5vCaU/ZlMl5H+HOwr4jA3P9fgOwBSKHDk4ZXLE9uinExKuHXK1hHPM84I3RaQXHsLRI7jCmNkXglkG/AlR7wwHvfwGmjGkoPQQWh8yjwMqJtGPdN4B1TCm6CxoEiPxtqUqW8LFtzLu2LX5SZBOzjGluZyXShwfqHqBjg0oyF3iLj49QFSQZHdMtsxRc+ZHIzeCWeDJ7mFfz68mfugiqhmEXmmbDxVk0MChmcGXpfKsxVVN4Ljum2T9fO2tzrM5P3uhhNKBY8urIsxQ2l1c+AxTjr7Om9hWpcNdpLly6/25Cx66DsYCcADGDkSvX"
+                            "ciphertext": "v1:aYzB/X1TMAX5SDXn:P8tQy8vrw1vhfRQcNuxX4YYkjLaVmkhM5cBzb6LpERRH05RoOKaeqw1QU6tXcsRs4Fwt61xZ6wU9eeOA/hDcwbPtwSuh3lL2kMaeU4eRRxkwXAkigKZFYdrMOxImiq2GLlB5VTn27rRkKnmDZcCk4GodRZHcObyFfZ6++lvPKmyR2fEXf+PaxLrmlr8PuQXpRhJhDNZhF9mMko2MyXr90/TKxmb4q3VagjdTnbMaO7O4uUGA+vpzs/5FrlrerBZhx0ixdwL4jRs8LdUXRxo5b26RKRBT0cSEznsmUFIu07wXKilwtpJfmrTDqfo0OS6MrDk+3RywGMvzdx1WUTE9Gv6Q/u9ujqtOLi6m+e+6iTJQTJl/3VOpr2ztyooazuojeffk4lMEH/OjGcMxKzHFxELSGd01vw+yOLUaHJcqCZBPws25BJquNjvCXYMP1yDxbuR63b9TdKOfgUUcHAi8lqSXuk6WjEV+zWUrveBGY+U6ZeF8Lwu+kf74rTocWxhSMM7JXuiokXINwV6aUEQ5alb9mwOgR5I6+Fs/uxyfuJpvxhJTXEZQd8DnkS0hNjudFrPaoxCT+q2XhcEk4EGj6JmqZBo6AXkvAaLYDJs4/XBJrpGm6Ci9zvUiNXyjBUz/un+H+4G6tJ2U434GUgquoEwaVwmdO14ai/EZ8qk0ynYDC2AI5d7+p3CxOIIsNg1n0M0Mq50F1y0V8fpo2QJtjIUkiefaq/1v55lhIAr8vRoxpl7Te1lSZ/fUFusZGhit7N7we29HBm3s0G0y+RCPzw48UaA/3PIpgTkcR+9RluBMGNV6+Z6p17OZJ1NMNFd6qMy7q/cb34WKqVf+BMOoh2IbCUldenprmjPwCnlIBwZPh4GYsgYDIDGyTpH8sLTum4MObBimoTgxKUe75Y3ILCYFkKtD5cgVzEIWYus4pjdTj3iMk6AZ3EpzMhzFNnqhTHZB955lu/RDee8Nx2QuuLVrkpwpp6R645cw67V54qVxrIEJ+Dw9B7dXT3YWulSGUt5IFRt5RpKCFJSY/a55dgIlDH/Etqy3JDno1x/0t5wgRJlVtHemKT8DCNhdV/C1jksYjvpv9OLUTDTkIkN2+iAFfL9zoBHYavv0BVTiKhvF5vR1TTCArDwCrSeqhLWwnaymnfqvfVs26475lZaMg512x8ceBdE/P1wfny/uXNs6rTUzAkpYo+FNZ3SfX0wo+RFM/VQVWghlmCc/4yzOkgsTLDGuDOjJXZFP+wVc0hjoeL3yGBCwCThISzGMdhjFi82SH3GEKZ1njVWnuMkeWcwwFo6i7ty5fSQDWCfDkl1WbJxE534jnzZa4PLR05Bad6JXUoO6aZnQNb7qZaOZJAjXZ14YeuCObmYP3NJ1w0sT1vGx4BICg4LSzCfThfaPqFTzGOk="
                         },
                         "arn": "arn:aws:iam::690622335846:role/ci-role-da0e98b",
                         "assumeRolePolicyDocument": {
@@ -150,6 +151,7 @@
                         "managedPolicyArns": [
                             "arn:aws:iam::aws:policy/CloudWatchEventsFullAccess",
                             "arn:aws:iam::aws:policy/IAMFullAccess",
+                            "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess",
                             "arn:aws:iam::aws:policy/AWSLambda_FullAccess",
                             "arn:aws:iam::aws:policy/AmazonS3FullAccess",
                             "arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser",
@@ -184,7 +186,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:C+9kodr/KSFa02RU:h2WPorxFvXfYmJG++Yy02ufCGW85fCJXmcY+KTnO1CVlKdjA3Xpf8M4q/mnKTVeMvqrIInwJ+m/7nnsynzwzij4isTnRBwstkIIgdI7lBgW3TZKinPmLHCKdYSXzIWUcG2hCX55URpSiT8E/yTj9V7eGfINfPnDuIuwIO3VBZROinADrM6O6baKhvpcwxCR9T/PwObcb4ZhowqOM4aIdAetGe1YylrBXgAMjJIUuARM2KtHisd6oKqN60/A+5f07JrdPDRd3ROSYDD6myT/4Tbthz3zHQ6XdjNpnNSpxY96BeqoAGas+oKJBf9K/ulXSyMZcnhfEQ8qtl/3O73GzM115W4uOxbbIhlO1YLMkxDPbhWI8ejBaTwtqVN8dpk1MH8mzxvEg7vHP6urJDMenBy33fAmORKYN41n6Yj9dj86ElcySEMy/Xxl3GsMmbEkxzurYXO11"
+                            "ciphertext": "v1:n7LOBTp5M/z8XIEf:GsKupKTDZfkmfXFINu8S9Ih3vpkVn0Wxc19BTgk/BuFnohXHx3X66pWacwCp8wkJZEe4rk6R8HBDbCQCfdwNAlLDXW11Zc2+7er+bD1/pzXbudLGF+a/AOHlidTkWSnQrOwQlUWLwK3e08Bxzy2QDFKR7neQbgZ3uT/pNqTBhHtS88by6ivq+/s5lZyE4xXzyZNvltBM1zZ+g4nHkw96abs9b43ZxHw0E0ad0cfwbYbFknnCnJcWRbNGTkDWPVE3a5Le4ilmTjGUYSDIY80OphsJ66XgDCNG9GUj9HGg647v9/2L222cfVvzdy+IZjUgiRz68e6B10QRDw3LLf0gBCeZYadEY08RZJkTJ4BzOc+vZqdum6Gs/kpGYcUpMI/xisSTdlwOF31kby7L2wDHgdchvg5ckpxAIFGXW7CLbANfK5l/Z5I9fkfRYisx+u+XIFQI66Y6"
                         },
                         "arn": "arn:aws:kms:us-east-1:690622335846:key/663c5308-1888-45a4-82e0-9af4d65a0ed1",
                         "description": "secret key for pulumi",
@@ -233,7 +235,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:P7Gbx64vqlc1Yz4h:nqDyLV1m+9j3RKZs57P8fBW+/S7A0zf0xdgj1/RxDgaE1D0uuak0vbwCKlO+E8LqMFVE4+JbHcfZCQGjwEJbf+MvnDj9FX5CtRBEwrdmhV1pF7jtdKBtqY/0egZ3N01fzg=="
+                            "ciphertext": "v1:ws19VAVYXWE6E87w:Ff9bBg7rwR8ShcUkEcBdjL5+Hju/LnYm08xtPJFplrQCL3tewF1WnsUGaGPYGzzqAYOHSdonjiCPuBoCTkXus/7rbOYQo1n1e9BPTD685DCuTPj46OKd7TfOVRsXiHTFjQ=="
                         },
                         "aliasName": "alias/pulumi",
                         "targetKeyId": "663c5308-1888-45a4-82e0-9af4d65a0ed1"
