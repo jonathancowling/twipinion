@@ -3,7 +3,7 @@
 set -euo pipefail
 
 : "${ENV:=dev}"
-: "${RETAIN:=false}"
+: "${RETAIN:=true}"
 
 echo "beginning bootstrapping for \"${ENV}\" environment..." >&2
 
@@ -32,7 +32,15 @@ popd
 
 pulumi login "${BUCKET}"
 
-for APPLICATION in "ingester" "hashtags" "visualise"; do
+APPLICATIONS=(
+  "ingester"
+  "hashtags"
+  "visualise"
+  "shared-network"
+  "shared-kafka"
+)
+
+for APPLICATION in "${APPLICATIONS[@]}"; do
 
   DEPLOYMENT="inf"
 

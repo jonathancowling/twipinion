@@ -1,8 +1,8 @@
 secretsprovider: awskms://alias/pulumi?region=us-east-1
-encryptedkey: AQICAHiqULfYo7qnrcsw8oUhDJQgMiq5+Uy7zBTNd5Gpnx89EgHBqw2FH2PR22rQV5aPMhN4AAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMdhxjitrfCDKQnVNnAgEQgDvs/wL5L+sZ+01CJIUAo9MhmO4SKl2TmsUFmeqjPuirfNG064z7B2cCDYWW+QJSfuhkZ/B1vMdmyYcrYg==
+encryptedkey: AQICAHgqAdFuMpk3gb5QGkiVlarukLMo0YOl5H53a2smXO/WYwFyuwma4ZOAPeXF5tPS/HeJAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMCjdn2M3/ov2bZcJsAgEQgDvHSLgbXyqb8PjknFfYjLTaLyytKbSN0x+wa7AmgoqTe3IEdwxkrdIs3S62mjbWbDFsfjUBD7fke35gUA==
 config:
   aws-native:region: us-east-1
   aws:region: us-east-1
   ingester:TWITTER_BEARER_TOKEN:
-    secure: v1:z8v9/YIUZI/DCdeh:D8F7RmyvR/PS1nNiex/+VoY649Mhke+G7mUedAa98DwyYxDqPQ40d44xK3SSRRt2uJ9nGzLQJOptLaAZi7NN7YXvYCiLQoCPxdKgEkjowK+n4qyKe4I9xfyTrY4cw6jZxwEe98CXFFAhjupv7V+IuoTxskQiaDMN6L+5ks6jQpm0MQ==
+    secure: v1:GqON6K+9W19wibzo:w9y4Bz098yQfCYX214fU/j5RDUMYK5gHNJ/vmyCGbDst8r6G8uVHqQZ1bZqbICSu2imse2U2ioEHJIm2/UMJtC8RNNf+NcxC+ucT/0feKQczJ3uBuxghfp2CGw3eY4Q5oPlCjnmTcwUnGVMqBgC9tnrX4zXVLTntzE/UBwMGbBnoCQ==
   ingester:env: dev
