@@ -16,7 +16,7 @@ func main() {
 		zones, err := aws.GetAvailabilityZones(ctx, &aws.GetAvailabilityZonesArgs{
 			ExcludeNames: []string { "us-east-1e" },
 			Filters: []aws.GetAvailabilityZonesFilter{
-				&aws.GetAvailabilityZonesFilter{
+				aws.GetAvailabilityZonesFilter{
 					Name: "zone-type",
 					Values: []string{ "availability-zone" },
 				},
