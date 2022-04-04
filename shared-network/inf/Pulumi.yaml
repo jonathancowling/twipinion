@@ -1,0 +1,3 @@
+name: shared-network
+runtime: go
+description: Shared network configuration

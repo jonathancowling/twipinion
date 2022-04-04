@@ -1,3 +1,0 @@
-name: ingester-bootstrap
-runtime: go
-description: Manual setup for the Ingester project

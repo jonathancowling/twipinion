@@ -4,7 +4,7 @@ Understand a brands public perception
 
 # Getting Started
 
-1. Run refresh script to bootstrap the project (scripts/refresh.sh)
+1. Run bootstrap script to bootstrap the project (scripts/bootstrap.sh)
 2. Push commits to main branch
    (push an empty commit to deploy to a new environments without a code change)
 

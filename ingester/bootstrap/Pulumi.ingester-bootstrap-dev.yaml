@@ -1,5 +1,0 @@
-secretsprovider: awskms://alias/pulumi?region=us-east-1
-encryptedkey: AQICAHieCo0kgu5+w9pc9qc8yCH27k3MHgfI8p8APVHNt739aAE/WtJMqK2zkuIkcOOAm+feAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxqO0aRzYlQHrdyKOAgEQgDujP+lxjqpeG9jFeNS7z9rvgIih+iAWRL1DbE5UX75QkgmKa5EJt0IH01JsbDftOGjFHYXWgGtjUzydCQ==
-config:
-  aws:region: us-east-1
-  ingester-bootstrap:env: dev

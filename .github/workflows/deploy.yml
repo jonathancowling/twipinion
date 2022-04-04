@@ -17,9 +17,7 @@ jobs:
     strategy:
       matrix:
         dir:
-          # - hastags
           - ingester
-          # - visualise
     steps:
       - uses: actions/checkout@v2
       - name: Set up Maven Central Repository
@@ -35,26 +33,18 @@ jobs:
           name: jar
           path: ${{matrix.dir}}/app/target/${{matrix.dir}}-*-aws.jar
 
-
-  deploy:
-    name: Deploy
-    needs: package
+  bootstrap:
+    name: Get Bootstrap Variables
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dir:
-          # - hastags
-          - ingester
-          # - visualise
+    outputs:
+      cloud-url: ${{steps.bootstrap.cloud-url}}
+      secrets-provider: ${{steps.bootstrap.secrets-provider}}
+      aws-role: ${{steps.bootstrap.aws-role}}
+      cloud-url: ${{steps.bootstrap.cloud-url}}
+      aws-region: ${{steps.bootstrap.aws-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
-        with:
-          go-version: '^1.16'
-      - uses: actions/download-artifact@v3
-        with:
-          name: jar
-          path: ${{matrix.dir}}/app/target/
       - name: set bootstrap variables
         id: bootstrap
         run: |
@@ -65,24 +55,95 @@ jobs:
           echo "::set-output name=secrets-provider::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'secrets provider'
           )"
-          echo "::set-output name=ci-role::$(
+          echo "::set-output name=aws-role::$(
             pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'
           )"
 
-          echo "::set-output name=region::$(
+          echo "::set-output name=aws-region::$(
             pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
           )"
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
         working-directory: bootstrap
+
+  init:
+    name: Ensure Stacks are Initialised
+    needs:
+      - bootstrap
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          - shared-network
+          - shared-kafka
+          - ingester
+    steps:
+      - uses: actions/checkout@v2
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{steps.bootstrap.outputs.ci-role}}
-          aws-region: ${{steps.bootstrap.outputs.region}}
+          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
+          aws-region: ${{needs.bootstrap.outputs.region}}
+
+  shared:
+    name: Deploy Shared
+    needs:
+      - bootstrap
+      - init
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          - shared-network
+          - shared-kafka
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16'
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
+          aws-region: ${{needs.bootstrap.outputs.region}}
       - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
-          cloud-url: ${{steps.bootstrap.outputs.cloud-url}} 
-          secrets-provider: ${{steps.bootstrap.outputs.secrets-provider}} 
+          cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
+          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}} 
+
+  applications:
+    name: Deploy Applications
+    needs:
+      - package
+      - bootstrap
+      - init
+      - shared
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir:
+          - ingester
+          # - hastags
+          # - visualise
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16'
+        # this step will trigger a warning for non-application jobs
+      - uses: actions/download-artifact@v3
+        with:
+          name: jar
+          path: ${{matrix.dir}}/app/target/
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
+          aws-region: ${{needs.bootstrap.outputs.region}}
+      - uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
+          work-dir: ./${{matrix.dir}}/inf
+          cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
+          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}}

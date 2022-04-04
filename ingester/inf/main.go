@@ -5,18 +5,30 @@ import (
 	"ingester/iampolicy"
 	"ingester/pom"
 
-	// native client doesn't yey support Service linked roles
+	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/ssm"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/iam"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/lambda"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/s3"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
-
 
 func main() {
 
 	pulumi.Run(func(ctx *pulumi.Context) error {
+
+		conf := config.New(ctx, "")
+
+		network, err := pulumi.NewStackReference(ctx, "shared-network-inf-" + conf.Require("env"), nil)
+		if err != nil {
+			return err
+		}
+
+		kafka, err := pulumi.NewStackReference(ctx, "shared-kafka-inf-" + conf.Require("env"), nil)
+		if err != nil {
+			return err
+		}
 		
 		pomFile, err := pom.LoadDefault()
 		if err != nil {
@@ -68,6 +80,34 @@ func main() {
 			return err
 		}
 
+		_, err = ssm.NewParameter(ctx, "twitter-bearer-parameter", &ssm.ParameterArgs{
+			Name: pulumi.String("/config/ingester-" + conf.Require("env") + "/config.twitter.bearer"),
+			Type:  pulumi.String("SecureString"),
+			Value: config.RequireSecret(ctx, "TWITTER_BEARER_TOKEN"),
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = ssm.NewParameter(ctx, "kafka-bootstrap-servers-parameter", &ssm.ParameterArgs{
+			Name: pulumi.String("/config/ingester-" + conf.Require("env") +  "/spring.kafka.bootstrap-servers"),
+			Type:  pulumi.String("String"),
+			Value: kafka.GetOutput(pulumi.String("Bootstrap Brokers TLS")).
+			    ApplyT(func (i interface {}) string { return i.(string) }).(pulumi.StringOutput),
+		})
+		if err != nil {
+			return err
+		}
+
+		subnets := network.GetOutput(pulumi.String("Subnet IDs")).
+			ApplyT(func (sIds interface {}) []string {
+				subnets := make([]string, len(sIds.([]interface{})))
+				for i, id := range sIds.([]interface{}) {
+					subnets[i] = id.(string)
+				}
+				return subnets
+			}).(pulumi.StringArrayOutput)
+
 		function, err := lambda.NewFunction(ctx, pomFile.ArtifactId + "-function", &lambda.FunctionArgs{
 			Runtime: pulumi.String("java11"),
 			Role:    role.Arn,
@@ -84,6 +124,13 @@ func main() {
 			MemorySize: pulumi.Int(1024),
 			Description: pulumi.String(pomFile.Description),
 			Timeout: pulumi.Int(300),
+			VpcConfig: &lambda.FunctionVpcConfigArgs{
+				SubnetIds: subnets,
+				VpcId: network.GetOutput(pulumi.String("VPC ID")).
+				    ApplyT(func (i interface {}) string { return i.(string) }).(pulumi.StringOutput),
+				SecurityGroupIds: kafka.GetOutput(pulumi.String("Security Group")).
+					ApplyT(func (i interface {}) []string { return []string { i.(string) } }).(pulumi.StringArrayOutput),
+			},
 		})
 		if err != nil {
 			return err
@@ -100,9 +147,6 @@ func main() {
 			Arn: function.Arn,
 			Rule: rule.Name,
 		})
-		
-
-		// TODO: msk
 
 		return nil
 	})
