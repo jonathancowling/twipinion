@@ -69,6 +69,8 @@ jobs:
     name: Deploy Shared
     needs: bootstrap
     runs-on: ubuntu-latest
+    concurrency: 
+      group: shared
     strategy:
       matrix:
         dir:
