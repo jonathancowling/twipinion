@@ -83,7 +83,7 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
-          aws-region: ${{needs.bootstrap.outputs.region}}
+          aws-region: ${{needs.bootstrap.outputs.aws-region}}
       - uses: pulumi/actions@v3
         with:
           command: up
