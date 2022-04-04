@@ -65,29 +65,10 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ''
         working-directory: bootstrap
 
-  init:
-    name: Ensure Stacks are Initialised
-    needs:
-      - bootstrap
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dir:
-          - shared-network
-          - shared-kafka
-          - ingester
-    steps:
-      - uses: actions/checkout@v2
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
-          aws-region: ${{needs.bootstrap.outputs.region}}
-
   shared:
     name: Deploy Shared
     needs:
       - bootstrap
-      - init
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -116,7 +97,6 @@ jobs:
     needs:
       - package
       - bootstrap
-      - init
       - shared
     runs-on: ubuntu-latest
     strategy:
