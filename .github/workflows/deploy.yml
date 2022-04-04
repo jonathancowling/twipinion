@@ -81,7 +81,7 @@ jobs:
           go-version: '^1.16'
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
+          role-to-assume: ${{needs.bootstrap.outputs.aws-role}}
           aws-region: ${{needs.bootstrap.outputs.aws-region}}
       - uses: pulumi/actions@v3
         with:
@@ -116,7 +116,7 @@ jobs:
           path: ${{matrix.dir}}/app/target/
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{needs.bootstrap.outputs.ci-role}}
+          role-to-assume: ${{needs.bootstrap.outputs.aws-role}}
           aws-region: ${{needs.bootstrap.outputs.region}}
       - uses: pulumi/actions@v3
         with:
