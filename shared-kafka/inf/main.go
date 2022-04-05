@@ -73,6 +73,7 @@ func main() {
 
 		ctx.Export("Zookeeper Connect String", cluster.ZookeeperConnectString)
 		ctx.Export("Bootstrap Brokers TLS", cluster.BootstrapBrokersTls)
+		ctx.Export("Security Group", sg.ID())
 
 		return nil
 	})
