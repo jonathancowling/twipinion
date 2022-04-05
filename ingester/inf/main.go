@@ -126,8 +126,6 @@ func main() {
 			Timeout: pulumi.Int(300),
 			VpcConfig: &lambda.FunctionVpcConfigArgs{
 				SubnetIds: subnets,
-				VpcId: network.GetOutput(pulumi.String("VPC ID")).
-				    ApplyT(func (i interface {}) string { return i.(string) }).(pulumi.StringOutput),
 				SecurityGroupIds: kafka.GetOutput(pulumi.String("Security Group")).
 					ApplyT(func (i interface {}) []string { return []string { i.(string) } }).(pulumi.StringArrayOutput),
 			},
