@@ -74,34 +74,6 @@ func main() {
 			return errors.New("no default subnet not found in region")
 		}
 
-		// sg, err := ec2.NewSecurityGroup(ctx, "default", &ec2.SecurityGroupArgs{
-		// 	VpcId: vpc.ID(),
-		// 	Ingress: ec2.SecurityGroupIngressArray{
-		// 		&ec2.SecurityGroupIngressArgs{
-		// 			Protocol: pulumi.String("tcp"),
-		// 			Self:     pulumi.Bool(true),
-		// 			FromPort: pulumi.Int(0),
-		// 			ToPort:   pulumi.Int(9094),
-		// 			CidrBlocks: pulumi.StringArray{
-		// 				vpc.CidrBlock,
-		// 			},
-		// 		},
-		// 	},
-		// 	Egress: ec2.SecurityGroupEgressArray{
-		// 		&ec2.SecurityGroupEgressArgs{
-		// 			FromPort: pulumi.Int(0),
-		// 			ToPort:   pulumi.Int(0),
-		// 			Protocol: pulumi.String("tcp"),
-		// 			Self:     pulumi.Bool(true),
-		// 			CidrBlocks: pulumi.StringArray{
-		// 				vpc.CidrBlock,
-		// 			},
-		// 		},
-		// 	},
-		// })
-		// if err != nil {
-		// 	return err
-		// }
 		_, err = ec2.NewRouteTable(ctx, "routetable", &ec2.RouteTableArgs{
 			VpcId: vpc.ID(),
 			Routes: ec2.RouteTableRouteArray{
@@ -119,7 +91,6 @@ func main() {
 		ctx.Export("VPC ID", vpc.ID())
 		ctx.Export("VPC CIDR", pulumi.String(network.String()))
 		ctx.Export("Subnet IDs", pulumi.ToIDArrayOutput(subnets))
-		// ctx.Export("Security Group", sg.ID())
 
 		return nil
 	})

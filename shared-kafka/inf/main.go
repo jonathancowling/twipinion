@@ -35,9 +35,8 @@ func main() {
 			Egress: ec2.SecurityGroupEgressArray{
 				&ec2.SecurityGroupEgressArgs{
 					FromPort: pulumi.Int(0),
-					ToPort:   pulumi.Int(0),
+					ToPort:   pulumi.Int(60000),
 					Protocol: pulumi.String("tcp"),
-					Self:     pulumi.Bool(true),
 					CidrBlocks: pulumi.StringArray{ vpcCidr },
 				},
 			},
