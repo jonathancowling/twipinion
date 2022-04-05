@@ -58,6 +58,7 @@ func main() {
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/AWSLambdaExecute").ToStringOutput(),
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/CloudWatchLogsFullAccess").ToStringOutput(),
 					iam.ManagedPolicy("arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess").ToStringOutput(),
+					iam.ManagedPolicy("arn:aws:iam::aws:policy/AmazonEC2FullAccess").ToStringOutput(),
 				}),
 
 			},
