@@ -1,0 +1,38 @@
+name: Bootstrap
+on:
+  workflow_dispatch:
+    inputs:
+      retain:
+        description: 'Should the existing environment be retained'     
+        required: true
+        default: true 
+        type: boolean
+      env:
+        description: 'Environment to deploy too'     
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+
+env:
+  ENV: ${{ github.event.inputs.env }}
+
+permissions:
+  id-token: write
+
+jobs:
+  bootstrap:
+    name: Bootstrap
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: scripts/bootstrap.sh
+        env:
+          RETAIN: ${{ github.event.inputs.retain }}
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: '.pulumi/ bootstrap/Pulumi.bootstrap-${{env.ENV}}.yaml'
+          commit: --signoff
+          default_author: github_actions
+          message: 'Bootstrap (GitHub actions)'
