@@ -62,16 +62,16 @@ func main() {
 			return err
 		}
 
-		// eip, err := ec2.NewEip(ctx, "nat-eip", &ec2.EipArgs{
-		// 	Vpc:      pulumi.Bool(true),
-		// })
-		// if err != nil {
-		// 	return err
-		// }
+		eip, err := ec2.NewEip(ctx, "nat-eip", &ec2.EipArgs{
+			Vpc:      pulumi.Bool(true),
+		})
+		if err != nil {
+			return err
+		}
 
 		nat, err := ec2.NewNatGateway(ctx, "nat", &ec2.NatGatewayArgs{
 			ConnectivityType: pulumi.String("public"),
-			// AllocationId: eip.ID(),
+			AllocationId: eip.ID(),
 			SubnetId: publicSubnet.ID(),
 		})
 		if err != nil {
@@ -106,7 +106,7 @@ func main() {
 
 		subnets := make([]pulumi.IDOutput, len(zoneNames))
 		for i, zone := range zoneNames {
-			subnetCidr, err := cidr.Subnet(network, 8, i + 3)
+			subnetCidr, err := cidr.Subnet(network, 8, i + 1)
 			if err != nil {
 				return err
 			}
