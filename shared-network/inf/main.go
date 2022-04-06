@@ -78,7 +78,7 @@ func main() {
 			if err != nil {
 				return err
 			}
-			_, err = ec2.NewRouteTableAssociation(ctx, "routeTableAssociation", &ec2.RouteTableAssociationArgs{
+			_, err = ec2.NewRouteTableAssociation(ctx, "rtb-association-" + zone, &ec2.RouteTableAssociationArgs{
 				SubnetId:     subnet.ID(),
 				RouteTableId: rtb.ID(),
 			})
