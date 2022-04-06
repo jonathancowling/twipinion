@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"net"
 
 	"github.com/apparentlymart/go-cidr/cidr"
@@ -48,26 +47,19 @@ func main() {
 			return err
 		}
 
-		subnets := make([]pulumi.IDOutput, len(zoneNames))
-		for i, zone := range zoneNames {
-			subnetCidr, err := cidr.Subnet(network, 8, i)
-			if err != nil {
-				return err
-			}
-
-			subnet, err := ec2.NewSubnet(ctx, fmt.Sprintf("subnet-%d", i),  &ec2.SubnetArgs{
-					VpcId: vpc.ID(),
-					AvailabilityZone: pulumi.String(zone),
-					CidrBlock: pulumi.String(subnetCidr.String()),
-				},
-		    )
-			subnets[i] = subnet.ID()
-			if err != nil {
-				return err
-			}
+		subnetCidr, err := cidr.Subnet(network, 8, 0)
+		if err != nil {
+			return err
 		}
-		if len(subnets) == 0 {
-			return errors.New("no default subnet not found in region")
+
+		publicSubnet, err := ec2.NewSubnet(ctx, "subnet-public",  &ec2.SubnetArgs{
+				VpcId: vpc.ID(),
+				AvailabilityZone: pulumi.String(zoneNames[0]),
+				CidrBlock: pulumi.String(subnetCidr.String()),
+			},
+		)
+		if err != nil {
+			return err
 		}
 
 		eip, err := ec2.NewEip(ctx, "nat-eip", &ec2.EipArgs{
@@ -77,25 +69,20 @@ func main() {
 			return err
 		}
 
-		nat, err := ec2.NewNatGateway(
-			ctx,
-			"nat",
-			&ec2.NatGatewayArgs{
-			    AllocationId: eip.ID(),
-			    SubnetId:     subnets[0],
-		    },
-		    pulumi.DependsOn([]pulumi.Resource{ gw }),
-		)
+		nat, err := ec2.NewNatGateway(ctx, "nat", &ec2.NatGatewayArgs{
+			ConnectivityType: pulumi.String("public"),
+			AllocationId: eip.ID(),
+			SubnetId: publicSubnet.ID(),
+		})
 		if err != nil {
 			return err
 		}
 
-		rtb, err := ec2.NewRouteTable(ctx, "rtb", &ec2.RouteTableArgs{
+		_, err = ec2.NewRouteTable(ctx, "rtb-public", &ec2.RouteTableArgs{
 			VpcId: vpc.ID(),
 			Routes: ec2.RouteTableRouteArray{
 				&ec2.RouteTableRouteArgs{
 					CidrBlock: pulumi.String("0.0.0.0/0"),
-					NatGatewayId: nat.ID(),
 					GatewayId: gw.ID(),
 				},
 			},
@@ -104,14 +91,47 @@ func main() {
 			return err
 		}
 
-		for i, id := range subnets {
-			_, err = ec2.NewRouteTableAssociation(ctx, fmt.Sprintf("rtb-association-%d", i), &ec2.RouteTableAssociationArgs{
-				SubnetId:     id,
-				RouteTableId: rtb.ID(),
+		privateRtb, err := ec2.NewRouteTable(ctx, "rtb-private", &ec2.RouteTableArgs{
+			VpcId: vpc.ID(),
+			Routes: ec2.RouteTableRouteArray{
+				&ec2.RouteTableRouteArgs{
+					CidrBlock: pulumi.String("0.0.0.0/0"),
+					NatGatewayId: nat.ID(),
+				},
+			},
+		})
+		if err != nil {
+			return err
+		}
+
+		subnets := make([]pulumi.IDOutput, len(zoneNames))
+		for i, zone := range zoneNames {
+			subnetCidr, err := cidr.Subnet(network, 8, i + 1)
+			if err != nil {
+				return err
+			}
+
+			subnet, err := ec2.NewSubnet(ctx, "subnet-" + zone,  &ec2.SubnetArgs{
+					VpcId: vpc.ID(),
+					AvailabilityZone: pulumi.String(zone),
+					CidrBlock: pulumi.String(subnetCidr.String()),
+				},
+		    )
+			subnets[i] = subnet.ID()
+			if err != nil {
+				return err
+			}
+
+			_, err = ec2.NewRouteTableAssociation(ctx, "rtb-private-assoc-" + zone, &ec2.RouteTableAssociationArgs{
+				SubnetId:     subnet.ID(),
+				RouteTableId: privateRtb.ID(),
 			})
 			if err != nil {
 				return err
 			}
+		}
+		if len(subnets) == 0 {
+			return errors.New("no default subnet not found in region")
 		}
 
 		// Export the name of the bucket
