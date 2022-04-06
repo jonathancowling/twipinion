@@ -16,7 +16,7 @@ func main() {
 		zones, err := aws.GetAvailabilityZones(ctx, &aws.GetAvailabilityZonesArgs{
 			ExcludeNames: []string { "us-east-1e" },
 			Filters: []aws.GetAvailabilityZonesFilter{
-				aws.GetAvailabilityZonesFilter{
+				{
 					Name: "zone-type",
 					Values: []string{ "availability-zone" },
 				},
@@ -47,6 +47,19 @@ func main() {
 			return err
 		}
 
+		rtb, err := ec2.NewRouteTable(ctx, "routetable", &ec2.RouteTableArgs{
+			VpcId: vpc.ID(),
+			Routes: ec2.RouteTableRouteArray{
+				&ec2.RouteTableRouteArgs{
+					CidrBlock: pulumi.String("0.0.0.0/0"),
+					GatewayId: gw.ID(),
+				},
+			},
+		})
+		if err != nil {
+			return err
+		}
+
 		subnets := make([]pulumi.IDOutput, len(zoneNames))
 		for i, zone := range zoneNames {
 			// FIXME: temporarily shift the zones to support recreation without deletion
@@ -65,6 +78,13 @@ func main() {
 			if err != nil {
 				return err
 			}
+			_, err = ec2.NewRouteTableAssociation(ctx, "routeTableAssociation", &ec2.RouteTableAssociationArgs{
+				SubnetId:     subnet.ID(),
+				RouteTableId: rtb.ID(),
+			})
+			if err != nil {
+				return err
+			}
 		}
 
 		if err != nil {
@@ -72,19 +92,6 @@ func main() {
 		}
 		if len(subnets) == 0 {
 			return errors.New("no default subnet not found in region")
-		}
-
-		_, err = ec2.NewRouteTable(ctx, "routetable", &ec2.RouteTableArgs{
-			VpcId: vpc.ID(),
-			Routes: ec2.RouteTableRouteArray{
-				&ec2.RouteTableRouteArgs{
-					CidrBlock: pulumi.String("0.0.0.0/0"),
-					GatewayId: gw.ID(),
-				},
-			},
-		})
-		if err != nil {
-			return err
 		}
 
 		// Export the name of the bucket
