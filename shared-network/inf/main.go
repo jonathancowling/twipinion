@@ -47,7 +47,7 @@ func main() {
 			return err
 		}
 
-		subnetCidr, err := cidr.Subnet(network, 8, 0)
+		subnetCidr, err := cidr.Subnet(network, 8, 8)
 		if err != nil {
 			return err
 		}
@@ -106,7 +106,7 @@ func main() {
 
 		subnets := make([]pulumi.IDOutput, len(zoneNames))
 		for i, zone := range zoneNames {
-			subnetCidr, err := cidr.Subnet(network, 8, i + 1)
+			subnetCidr, err := cidr.Subnet(network, 8, i + 9)
 			if err != nil {
 				return err
 			}
