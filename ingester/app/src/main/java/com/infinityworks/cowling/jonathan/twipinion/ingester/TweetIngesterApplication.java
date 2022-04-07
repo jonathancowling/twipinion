@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -68,6 +69,14 @@ public class TweetIngesterApplication {
 	public UriBuilderFactory uriBuilder() {
 		return new DefaultUriBuilderFactory();
 	}
+
+	@Bean
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
+        ThreadPoolTaskScheduler threadPoolTaskScheduler
+          = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(true);
+        return threadPoolTaskScheduler;
+    }
 
 	@Bean
 	public Supplier<Flux<Tweet>> test(
