@@ -19,9 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilderFactory;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 
+@Slf4j
 @Service
 public class TwitterClient {
     @Autowired
@@ -80,6 +82,12 @@ public class TwitterClient {
                     .build())
                     .orElse(null);
         })
+            .doOnNext(n -> {
+                log.info("got tweet {}", n);
+            })
+            .doOnError(e -> {
+                log.info("failed getting tweet {}", e);
+            })
             .flatMap(res -> Flux.just(res.toTweets().toArray((i) -> new Tweet[i])))
             .bufferTimeout(100, Duration.parse(timeout));
     }
