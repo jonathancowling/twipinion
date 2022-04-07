@@ -2,6 +2,7 @@ package com.infinityworks.cowling.jonathan.twipinion.ingester;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,13 +20,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilderFactory;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
+@Slf4j
 @SpringBootApplication
 public class TweetIngesterApplication {
 
@@ -70,12 +76,26 @@ public class TweetIngesterApplication {
 		@Autowired KafkaTemplate<String, String> kafka
 	) {
 		return () -> {
-			return twitter.recent().take(Duration.ofMinutes(1)).flatMapIterable((l) -> l).doOnNext(tweet -> {
-				try {
-					kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
-				} catch (JsonProcessingException e) {
-					e.printStackTrace();
-				}
+			return twitter.recent().take(Duration.ofMinutes(1)).flatMapIterable((l) -> l).flatMap(tweet -> {
+				return Mono.fromFuture(() -> {
+					ListenableFuture<SendResult<String, String>> l;
+					try {
+						l = kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
+					} catch (JsonProcessingException e) {
+						e.printStackTrace();
+						return CompletableFuture.failedFuture(e);
+					}
+					CompletableFuture<Tweet> f = new CompletableFuture<>() {
+						@Override
+						public boolean cancel(boolean mayInterruptIfRunning) {
+						   boolean result = l.cancel(mayInterruptIfRunning);
+						   super.cancel(mayInterruptIfRunning);
+						   return result;
+						}
+					};
+					l.addCallback((result) -> f.complete(tweet), f::completeExceptionally);
+					return f;
+				});
 			});
 		};
 	}
