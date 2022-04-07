@@ -80,7 +80,7 @@ public class TweetIngesterApplication {
 	) {
 		return () -> {
 			return twitter.recent()
-			    .take(Duration.ofSeconds(10))
+			    .take(Duration.ofSeconds(15))
 				.flatMapIterable((l) -> l)
 				.flatMap(tweet -> Mono.fromFuture(() -> {
 						ListenableFuture<SendResult<String, String>> l;
