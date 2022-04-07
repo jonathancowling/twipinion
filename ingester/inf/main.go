@@ -5,13 +5,14 @@ import (
 	"ingester/iampolicy"
 	"ingester/pom"
 
-	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/ssm"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/iam"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/lambda"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/s3"
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/ssm"
+	"github.com/pulumi/pulumi-random/sdk/v4/go/random"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
 
 func main() {
@@ -72,10 +73,22 @@ func main() {
 			return err
 		}
 
-		uploadedJar, err := s3.NewBucketObject(ctx, "lambda-jar", &s3.BucketObjectArgs{
-			Key: pulumi.String("jar"),
+		archive := pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws"))
+
+		jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
+			Keepers: pulumi.ToMap(map[string]interface{}{
+				"archive": archive,
+			}),
+		})
+		if err != nil {
+			return err
+		}
+
+		// TODO: include artifact id
+		uploadedJar, err := s3.NewBucketObject(ctx, "lambda-jar" , &s3.BucketObjectArgs{
+			Key: jarSuffix.B64Std.ApplyT(func (suffix string) string { return "jar-" + suffix }).(pulumi.StringOutput),
 			Bucket: bucket.ID(),
-			Source: pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws")),
+			Source: archive,
 		})
 		if err != nil {
 			return err
