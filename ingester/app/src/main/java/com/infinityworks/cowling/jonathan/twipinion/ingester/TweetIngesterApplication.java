@@ -76,8 +76,7 @@ public class TweetIngesterApplication {
 	public Supplier<Flux<Tweet>> test(
 		@Autowired TwitterClient twitter,
 		@Autowired ObjectMapper mapper,
-		@Autowired KafkaTemplate<String, String> kafka,
-		@Autowired ThreadPoolTaskScheduler scheduler
+		@Autowired KafkaTemplate<String, String> kafka
 	) {
 		return () -> {
 			return twitter.recent()
