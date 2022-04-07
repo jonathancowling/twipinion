@@ -30,6 +30,8 @@ import org.springframework.web.util.UriBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
 
 @Slf4j
@@ -71,41 +73,36 @@ public class TweetIngesterApplication {
 	}
 
 	@Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
-        ThreadPoolTaskScheduler threadPoolTaskScheduler
-          = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(true);
-        return threadPoolTaskScheduler;
-    }
-
-	@Bean
 	public Supplier<Flux<Tweet>> test(
 		@Autowired TwitterClient twitter,
 		@Autowired ObjectMapper mapper,
-		@Autowired KafkaTemplate<String, String> kafka
+		@Autowired KafkaTemplate<String, String> kafka,
+		@Autowired ThreadPoolTaskScheduler scheduler
 	) {
 		return () -> {
-			return twitter.recent().take(Duration.ofMinutes(1)).flatMapIterable((l) -> l).flatMap(tweet -> {
-				return Mono.fromFuture(() -> {
-					ListenableFuture<SendResult<String, String>> l;
-					try {
-						l = kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
-					} catch (JsonProcessingException e) {
-						e.printStackTrace();
-						return CompletableFuture.failedFuture(e);
-					}
-					CompletableFuture<Tweet> f = new CompletableFuture<>() {
-						@Override
-						public boolean cancel(boolean mayInterruptIfRunning) {
-						   boolean result = l.cancel(mayInterruptIfRunning);
-						   super.cancel(mayInterruptIfRunning);
-						   return result;
+			return twitter.recent()
+			    .take(Duration.ofMinutes(1))
+				.flatMapIterable((l) -> l)
+				.flatMap(tweet -> Mono.fromFuture(() -> {
+						ListenableFuture<SendResult<String, String>> l;
+						try {
+							l = kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
+						} catch (JsonProcessingException e) {
+							e.printStackTrace();
+							return CompletableFuture.failedFuture(e);
 						}
-					};
-					l.addCallback((result) -> f.complete(tweet), f::completeExceptionally);
-					return f;
-				});
-			});
+						CompletableFuture<Tweet> f = new CompletableFuture<>() {
+							@Override
+							public boolean cancel(boolean mayInterruptIfRunning) {
+							boolean result = l.cancel(mayInterruptIfRunning);
+							super.cancel(mayInterruptIfRunning);
+							return result;
+							}
+						};
+						l.addCallback((result) -> f.complete(tweet), f::completeExceptionally);
+						return f;
+				})
+			).publishOn(Schedulers.boundedElastic());
 		};
 	}
 }
