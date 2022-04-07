@@ -85,6 +85,7 @@ public class TweetIngesterApplication {
 				.flatMap(tweet -> Mono.fromFuture(() -> {
 						ListenableFuture<SendResult<String, String>> l;
 						try {
+							log.info("test pre send");
 							l = kafka.sendDefault(tweet.getId(), mapper.writeValueAsString(tweet));
 						} catch (JsonProcessingException e) {
 							e.printStackTrace();
@@ -98,7 +99,10 @@ public class TweetIngesterApplication {
 							return result;
 							}
 						};
-						l.addCallback((result) -> f.complete(tweet), (e) -> {
+						l.addCallback((result) -> {
+							log.info("test post send");
+							f.complete(tweet);
+						}, (e) -> {
 							log.error("callback: {}", e);
 							f.completeExceptionally(e);
 						});
