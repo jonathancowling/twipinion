@@ -78,7 +78,7 @@ func main() {
 			return err
 		}
 
-		_, err = ec2.NewRouteTable(ctx, "rtb-public", &ec2.RouteTableArgs{
+		publicRtb, err := ec2.NewRouteTable(ctx, "rtb-public", &ec2.RouteTableArgs{
 			VpcId: vpc.ID(),
 			Routes: ec2.RouteTableRouteArray{
 				&ec2.RouteTableRouteArgs{
@@ -103,6 +103,14 @@ func main() {
 		if err != nil {
 			return err
 		}
+
+		_, err = ec2.NewRouteTableAssociation(ctx, "rtb-public-assoc", &ec2.RouteTableAssociationArgs{
+			SubnetId:     publicSubnet.ID(),
+			RouteTableId: publicRtb.ID(),
+		})
+		if err != nil {
+			return err
+		}		
 
 		subnets := make([]pulumi.IDOutput, len(zoneNames))
 		for i, zone := range zoneNames {
