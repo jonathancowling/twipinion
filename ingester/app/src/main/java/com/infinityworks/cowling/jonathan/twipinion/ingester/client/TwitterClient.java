@@ -5,7 +5,6 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -118,7 +117,7 @@ public class TwitterClient {
             @lombok.Value
             @JsonIgnoreProperties(ignoreUnknown = true)
             private static class Entities {
-                List<Hashtag> hashtags = new ArrayList<>();
+                List<Hashtag> hashtags = Collections.emptyList();
 
                 @lombok.Value
                 @JsonIgnoreProperties(ignoreUnknown = true)
