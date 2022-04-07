@@ -82,11 +82,9 @@ public class TwitterClient {
                     .build())
                     .orElse(null);
         })
-            .doOnNext(n -> {
-                log.info("got tweet {}", n);
-            })
             .doOnError(e -> {
-                log.info("failed getting tweet {}", e);
+                log.error("error getting tweet");
+                log.error("error getting tweet", e);
             })
             .flatMap(res -> Flux.just(res.toTweets().toArray((i) -> new Tweet[i])))
             .bufferTimeout(100, Duration.parse(timeout));
