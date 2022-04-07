@@ -101,7 +101,9 @@ public class TweetIngesterApplication {
 						l.addCallback((result) -> f.complete(tweet), f::completeExceptionally);
 						return f;
 				})
-			).publishOn(Schedulers.boundedElastic());
+			).onErrorContinue(InterruptedException.class, (e, o) -> {
+				log.error("continuing: {}\n{}", o, e);
+			});
 		};
 	}
 }
