@@ -98,7 +98,10 @@ public class TweetIngesterApplication {
 							return result;
 							}
 						};
-						l.addCallback((result) -> f.complete(tweet), f::completeExceptionally);
+						l.addCallback((result) -> f.complete(tweet), (e) -> {
+							log.error("callback: {}", e);
+							f.completeExceptionally(e);
+						});
 						return f;
 				})
 			).onErrorContinue(InterruptedException.class, (e, o) -> {
