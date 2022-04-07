@@ -76,6 +76,7 @@ func main() {
 		archive := pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws"))
 
 		jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
+			ByteLength: pulumi.Int(6),
 			Keepers: pulumi.ToMap(map[string]interface{}{
 				"archive": archive,
 			}),
