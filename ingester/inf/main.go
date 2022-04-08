@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"ingester/iampolicy"
 	"ingester/pom"
+	"io"
 	"os"
 
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/cloudwatch"
@@ -12,7 +13,6 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/lambda"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/s3"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/ssm"
-	"github.com/pulumi/pulumi-random/sdk/v4/go/random"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 )
@@ -77,7 +77,7 @@ func main() {
 
 
 		archive := pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws"))
-	    archiveHash, err := os.ReadFile(archive.Path())
+	    archiveContents, err := os.Open(archive.Path())
 		if err != nil {
 			return err
 		}
@@ -85,15 +85,21 @@ func main() {
 		// jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
 		// 	ByteLength: pulumi.Int(6),
 		// 	Keepers: pulumi.ToMap(map[string]interface{}{
-		// 		"archive": sha512.Sum512(archiveHash),
+		// 		"archive": sha512.Sum512(archiveContents),
 		// 	}),
 		// })
 		// if err != nil {
 		// 	return err
 		// }
 
+		archiveHash := sha512.New()
+		_, err = io.Copy(archiveHash, archiveContents)
+		if err != nil {
+			return err
+		}
+
 		uploadedJar, err := s3.NewBucketObject(ctx, pomFile.ArtifactId + "-lambda-jar" , &s3.BucketObjectArgs{
-			Key: pulumi.String("jar-" + string(archiveHash)),
+			Key: pulumi.String("jar-" + string(archiveHash.Sum(nil))),
 			Bucket: bucket.ID(),
 			Source: archive,
 		})
