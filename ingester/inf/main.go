@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/sha512"
 	"encoding/json"
+	"fmt"
 	"ingester/iampolicy"
 	"ingester/pom"
 	"io"
@@ -99,7 +100,7 @@ func main() {
 		}
 
 		uploadedJar, err := s3.NewBucketObject(ctx, pomFile.ArtifactId + "-lambda-jar" , &s3.BucketObjectArgs{
-			Key: pulumi.String("jar-" + string(archiveHash.Sum(nil))),
+			Key: pulumi.String(fmt.Sprintf("jar-%x", archiveHash.Sum(nil))),
 			Bucket: bucket.ID(),
 			Source: archive,
 		})
