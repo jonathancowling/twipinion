@@ -9,7 +9,7 @@ spring.kafka:
   template.default-topic: tweets
 
 config:
-  timeout: PT10S
+  timeout: PT30S
   twitter.within: PT1H
   twitter.uri: https://api.twitter.com
   twitter.query: >-
