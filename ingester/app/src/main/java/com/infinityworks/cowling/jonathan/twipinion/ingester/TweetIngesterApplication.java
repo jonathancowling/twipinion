@@ -2,8 +2,10 @@ package com.infinityworks.cowling.jonathan.twipinion.ingester;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -73,7 +75,7 @@ public class TweetIngesterApplication {
 	}
 
 	@Bean
-	public Supplier<Flux<Tweet>> test(
+	public Supplier<Mono<TweetResult>> test(
 		@Autowired TwitterClient twitter,
 		@Autowired ObjectMapper mapper,
 		@Autowired KafkaTemplate<String, String> kafka
@@ -110,7 +112,13 @@ public class TweetIngesterApplication {
 				})
 			).onErrorContinue(InterruptedException.class, (e, o) -> {
 				log.error("continuing: {}\n{}", o, e);
-			});
+			}).collect(Collectors.toList())
+			.map(tweets -> new TweetResult(tweets));
 		};
+	}
+
+	@lombok.Value
+	public static class TweetResult {
+		private List<Tweet> tweets;
 	}
 }
