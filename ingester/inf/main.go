@@ -1,9 +1,11 @@
 package main
 
 import (
+	"crypto/sha512"
 	"encoding/json"
 	"ingester/iampolicy"
 	"ingester/pom"
+	"os"
 
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v4/go/aws/iam"
@@ -73,21 +75,25 @@ func main() {
 			return err
 		}
 
-		archive := pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws"))
 
-		jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
-			ByteLength: pulumi.Int(6),
-			Keepers: pulumi.ToMap(map[string]interface{}{
-				"archive": archive,
-			}),
-		})
+		archive := pulumi.NewFileArchive("../app/target/" + pomFile.SuffixedJar("aws"))
+	    archiveHash, err := os.ReadFile(archive.Path())
 		if err != nil {
 			return err
 		}
 
-		// TODO: include artifact id
-		uploadedJar, err := s3.NewBucketObject(ctx, "lambda-jar" , &s3.BucketObjectArgs{
-			Key: jarSuffix.B64Std.ApplyT(func (suffix string) string { return "jar-" + suffix }).(pulumi.StringOutput),
+		// jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
+		// 	ByteLength: pulumi.Int(6),
+		// 	Keepers: pulumi.ToMap(map[string]interface{}{
+		// 		"archive": sha512.Sum512(archiveHash),
+		// 	}),
+		// })
+		// if err != nil {
+		// 	return err
+		// }
+
+		uploadedJar, err := s3.NewBucketObject(ctx, pomFile.ArtifactId + "-lambda-jar" , &s3.BucketObjectArgs{
+			Key: pulumi.String("jar-" + string(archiveHash)),
 			Bucket: bucket.ID(),
 			Source: archive,
 		})
