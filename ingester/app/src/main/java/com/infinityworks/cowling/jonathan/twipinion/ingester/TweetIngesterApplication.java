@@ -102,7 +102,7 @@ public class TweetIngesterApplication {
 							}
 						};
 						l.addCallback((result) -> {
-							log.info("test post send");
+							log.info("test post send: {}", result);
 							f.complete(tweet);
 						}, (e) -> {
 							log.error("callback: {}", e);
@@ -110,7 +110,7 @@ public class TweetIngesterApplication {
 						});
 						return f;
 				})
-			).onErrorContinue(InterruptedException.class, (e, o) -> {
+			).onErrorContinue((e, o) -> {
 				log.error("continuing: {}\n{}", o, e);
 			}).collect(Collectors.toList())
 			.map(tweets -> new TweetResult(tweets));
