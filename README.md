@@ -29,7 +29,13 @@ that needs extra base infrastructure in place to deploy it (e.g. secrets).
 - (Coming Soon) Store [Snowflake]()
 - (Coming Soon) Frontend
 
-# Architecture Principles
+# Architecture
+
+## Diagram
+
+![arch](./arch.svg)
+
+## Principles
 
 - Applications are decoupled with message passing
 - Applications should be serverless if possible
