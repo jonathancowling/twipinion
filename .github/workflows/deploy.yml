@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
-      - name: set bootstrap variables
+      - name: set aws variables
         id: bootstrap-aws
         run: |
           pulumi login 'file://${{github.workspace}}'
@@ -71,10 +71,10 @@ jobs:
 
           pulumi logout
         working-directory: bootstrap/00_aws
-      - name: set bootstrap variables
+      - name: set snowflake variables
         id: bootstrap-snowflake
         run: |
-          pulumi login '${{steps.bootstrap-aws.outputs.cloud-url}}''
+          pulumi login '${{steps.bootstrap-aws.outputs.cloud-url}}'
 
           echo "::set-output name=snowflake-login::$(
             pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake login'
