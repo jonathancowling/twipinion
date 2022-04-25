@@ -35,6 +35,32 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
 
+  sql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: tweets
+    ports:
+      - "3306:3306"
+
+  sql-ui:
+    image: sqlpad/sqlpad
+    environment:
+      - SQLPAD_CONNECTIONS__local__name="Local"
+      - SQLPAD_CONNECTIONS__local__driver=mysql
+      - SQLPAD_CONNECTIONS__local__host=sql
+      - SQLPAD_CONNECTIONS__local__port=3306
+      - SQLPAD_CONNECTIONS__local__username=admin
+      - SQLPAD_CONNECTIONS__local__password=admin
+      - SQLPAD_ADMIN=admin@admin.com
+      - SQLPAD_ADMIN_PASSWORD=admin
+      - SQLPAD_PORT=8082
+    ports:
+      - "8082:8082"
+
 volumes:
   zookeeper_data:
     driver: local

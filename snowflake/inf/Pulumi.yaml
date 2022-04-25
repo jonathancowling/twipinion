@@ -1,0 +1,3 @@
+name: snowflake
+runtime: go
+description: Uploads tweets to snowflake from kafka

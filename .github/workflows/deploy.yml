@@ -37,33 +37,61 @@ jobs:
     name: Get Bootstrap Variables
     runs-on: ubuntu-latest
     outputs:
-      cloud-url: ${{steps.bootstrap.outputs.cloud-url}}
-      secrets-provider: ${{steps.bootstrap.outputs.secrets-provider}}
-      aws-role: ${{steps.bootstrap.outputs.aws-role}}
-      aws-region: ${{steps.bootstrap.outputs.aws-region}}
+      cloud-url: ${{steps.bootstrap-aws.outputs.cloud-url}}
+      secrets-provider: ${{steps.bootstrap-aws.outputs.secrets-provider}}
+      aws-role: ${{steps.bootstrap-aws.outputs.aws-role}}
+      aws-region: ${{steps.bootstrap-aws.outputs.aws-region}}
+      snowflake-account: ${{steps.bootstrap-snowflake.outputs.snowflake-account}}
+      snowflake-username: ${{steps.bootstrap-snowflake.outputs.snowflake-login}}
+      snowflake-password: ${{steps.bootstrap-snowflake.outputs.snowflake-password}}
+      snowflake-region: ${{steps.bootstrap-aws.outputs.aws-region}}
+    env:
+      PULUMI_CONFIG_PASSPHRASE: ''
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
       - name: set bootstrap variables
-        id: bootstrap
+        id: bootstrap-aws
         run: |
-          pulumi login file://..
+          pulumi login 'file://${{github.workspace}}'
+
           echo "::set-output name=cloud-url::$(
-            pulumi stack output --stack bootstrap-${{env.ENV}} 'bucket name'
+            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'pulumi backend'
           )"
           echo "::set-output name=secrets-provider::$(
-            pulumi stack output --stack bootstrap-${{env.ENV}} 'secrets provider'
+            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'pulumi secrets provider'
           )"
           echo "::set-output name=aws-role::$(
-            pulumi stack output --stack bootstrap-${{env.ENV}} 'ci role'
+            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'aws ci role'
           )"
           echo "::set-output name=aws-region::$(
-            pulumi config get --stack bootstrap-${{env.ENV}} aws-native:region
+            pulumi config get --stack bootstrap-00_aws-${{env.ENV}} aws-native:region ||
+              pulumi config get --stack bootstrap-00_aws-${{env.ENV}} aws:region
           )"
+
           pulumi logout
-        env:
-          PULUMI_CONFIG_PASSPHRASE: ''
-        working-directory: bootstrap
+        working-directory: bootstrap/00_aws
+      - name: set bootstrap variables
+        id: bootstrap-snowflake
+        run: |
+          pulumi login '${{steps.bootstrap-aws.outputs.cloud-url}}''
+
+          echo "::set-output name=snowflake-login::$(
+            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake login'
+          )"
+
+          SNOWFLAKE_PASSWORD="$(
+            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake password'
+          )"
+          echo "::add-mask::${SNOWFLAKE_PASSWORD}"
+          echo "::set-output name=snowflake-password::${SNOWFLAKE_PASSWORD}"
+
+          echo "::set-output name=snowflake-account::$(
+            pulumi config get --stack bootstrap-10_snowflake-${{env.ENV}} snowflake:account
+          )"
+          
+          pulumi logout
+        working-directory: bootstrap/10_snowflake
 
   shared:
     name: Deploy Shared
@@ -103,6 +131,7 @@ jobs:
       matrix:
         dir:
           - ingester
+          - snowflake
           # - hastags
           # - visualise
     steps:

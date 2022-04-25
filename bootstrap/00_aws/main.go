@@ -26,6 +26,9 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Export("pulumi backend", bucket.BucketName.ApplyT(func(name *string) string {
+			return "s3://" + *name
+		}))
 
 		oidc, err := iam.NewOIDCProvider(
 			ctx,
@@ -43,6 +46,7 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Export("OIDC", oidc.Url)
 
 		ciPolicyDocument := oidc.Arn.ApplyT(func(arn string) string {
 			return `{
@@ -79,6 +83,7 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Export("aws ci role", ciRole.Arn)
 
 		alias := ciRole.Arn.ApplyT(func (ciRoleArn string) pulumi.Output {
 			out, in, e := ctx.NewOutput()
@@ -87,7 +92,6 @@ func main() {
 				"Version": "2012-10-17",
 				"Statement": []map[string]interface{}{
 					{
-						"Sid":    "Describe the policy statement",
 						"Effect": "Allow",
 						"Principal": map[string]interface{}{
 							"AWS": []string{
@@ -132,15 +136,8 @@ func main() {
 			}))
 			return out
 		})
-		ctx.Export("secrets provider", alias)
+		ctx.Export("pulumi secrets provider", alias)
 
-		// Export the name of the bucket
-		ctx.Export("bucket name", bucket.BucketName.ApplyT(func(name *string) string {
-			return "s3://" + *name
-		}))
-		ctx.Export("OIDC", oidc.Url)
-
-		ctx.Export("ci role", ciRole.Arn)
 		return nil
 	})
 }

@@ -30,5 +30,5 @@ hs_err_pid*
 
 .DS_Store
 
-*.env
-!sample.env
+*.env.sh
+!sample.env.sh

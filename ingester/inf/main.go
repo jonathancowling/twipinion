@@ -83,16 +83,6 @@ func main() {
 			return err
 		}
 
-		// jarSuffix, err := random.NewRandomId(ctx, pomFile.ArtifactId + "-src-suffix", &random.RandomIdArgs{
-		// 	ByteLength: pulumi.Int(6),
-		// 	Keepers: pulumi.ToMap(map[string]interface{}{
-		// 		"archive": sha512.Sum512(archiveContents),
-		// 	}),
-		// })
-		// if err != nil {
-		// 	return err
-		// }
-
 		archiveHash := sha512.New()
 		_, err = io.Copy(archiveHash, archiveContents)
 		if err != nil {
@@ -144,7 +134,6 @@ func main() {
 			S3Key: uploadedJar.Key,
 			Environment: &lambda.FunctionEnvironmentArgs{
 				Variables: pulumi.StringMap{
-					"FUNCTION_NAME": pulumi.String("test"),
 					"SPRING_PROFILES_ACTIVE": pulumi.String("dev"),
 					"SPRING_CLOUD_BOOTSTRAP_NAME": pulumi.String("bootstrap_dev"),
 				},

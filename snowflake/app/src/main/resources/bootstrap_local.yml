@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    include: native
+  application.name: ingester
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:./src/main/resources/configserver/{profile}
+          addLabelLocations: false
+        bootstrap: true

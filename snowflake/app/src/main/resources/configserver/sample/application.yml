@@ -1,0 +1,3 @@
+config:
+  twitter:
+    bearer: bearer token

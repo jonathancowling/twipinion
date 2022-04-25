@@ -1,0 +1,57 @@
+spring.application.name: snowflake
+
+spring.kafka:
+  admin.fail-fast: true
+  client-id: spring
+  bootstrap-servers: localhost:29092
+  # doesn't work
+  # consumer:
+  #   value-serializer: fail
+  #   key-serializer: fail
+
+
+# docs
+# https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/3.1.0.M1/reference/html/index.html#_configuration_options_2
+
+# don't work
+# spring.cloud.stream.kafka.streams.binder.configuration.default.key.serde: fail
+# spring.cloud.stream.kafka.streams.binder.configuration.default.value.serde: fail
+# spring.cloud.stream.kafka.streams.binder.configuration.default.keySerde: fail
+# spring.cloud.stream.kafka.streams.binder.configuration.default.valueSerde: fail
+# spring.cloud.stream.kafka.default.consumer.key.serde: fail
+# spring.cloud.stream.kafka.default.consumer.value.serde: fail
+# spring.cloud.stream.kafka.default.consumer.keySerde: fail
+# spring.cloud.stream.kafka.default.consumer.valueSerde: fail
+# spring.cloud.stream.bindings.test-in-0.consumer.keySerde: fail
+# spring.cloud.stream.bindings.test-in-0.consumer.valueSerde: fail
+# spring.cloud.stream.bindings.test-in-0.consumer.key.serde: fail
+# spring.cloud.stream.bindings.test-in-0.consumer.value.serde: fail
+# spring.cloud.stream.bindings.test-in-0.consumer.nativeDecoding: false
+
+spring.cloud.stream.bindings.test-in-0.consumer.key.serializer: fail
+spring.cloud.stream.bindings.test-in-0.consumer.value.serializer: fail
+
+spring.cloud:
+  function:
+    definition: test
+  stream:
+    kafka:
+      default:
+        consumer:
+          startOffset: earliest
+    bindings:
+      test-in-0:
+        destination: tweets
+
+# config:
+#   store:
+#     url: localhost:5678
+#     driver: com.mysql.cj.jdbc.Driver
+    # com.snowflake.client.jdbc.SnowflakeDriver
+
+spring.datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/tweets
+  # jdbc:snowflake://myorganization-myaccount.snowflakecomputing.com/?user=peter&warehouse=mywh&db=mydb&schema=public
+  username: admin
+  password: admin

@@ -1,4 +1,4 @@
-module bootstrap
+module bootstrap-aws
 
 go 1.14
 

@@ -7,6 +7,8 @@ spring.kafka:
     value-serializer: org.apache.kafka.common.serialization.StringSerializer
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
   template.default-topic: tweets
+spring.cloud.function:
+  definition: test
 
 config:
   timeout: PT30S

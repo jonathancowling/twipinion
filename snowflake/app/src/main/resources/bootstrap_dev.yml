@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include: awsparamstore
+  application.name: ingester
+  cloud:
+    config:
+      server:
+        bootstrap: true

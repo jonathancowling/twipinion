@@ -1,0 +1,10 @@
+secretsprovider: awskms://alias/pulumi?region=us-east-1
+encryptedkey: AQICAHjZmB+i9PFAR3Jr89RLoTVXyiU+ME3a9+iRamh3RZc27gEsZJMdTmEBcKUFClbnR2eDAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMAsSOpUS3Gcpi9ds/AgEQgDvqQGPkLx22t0ODpwEleHh/pJF8h/kldrmi3j/kzottlL9O8vUX9I9HA2NNG7fv4GiZ3ypnXGNZstpn8Q==
+config:
+  aws-native:region: us-east-1
+  bootstrap:repo: jonathancowling/twipinion
+  snowflake:account: gzb06656
+  snowflake:password:
+    secure: v1:3zPD4zyOv8FVGaDP:GRBFnbKZ5a2iJKl54hy53H8cLr1z7s3mxTtnuQ6P6+wfTjkh6Hg0oFrfz28hAig7dn4knvbbPi47PZdxy6jZgcvTxtQOpiG5oevtqvg+yQs=
+  snowflake:region: us-east-1
+  snowflake:username: jonathancowling

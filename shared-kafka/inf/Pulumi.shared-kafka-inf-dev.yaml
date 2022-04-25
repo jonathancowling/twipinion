@@ -1,4 +1,3 @@
-secretsprovider: awskms://alias/pulumi?region=us-east-1
-encryptedkey: AQICAHhLVqvea/a66LUaVXmFGNHoIB8hY3aC7uj5uB7p4aRYawFCse8StE3yrcfgMjsCpnXSAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMKhd8scf+zXbcTZYTAgEQgDss+aT8ZOnatfhJw3G0zaE1vv9IyCxSrWYROpQ65m8jTGDqiC3G6PFAQGfXKdksaKyQT/I/bZQeIEJG+Q==
+encryptionsalt: v1:3AYUq6ld3ek=:v1:Bv0dd+xJeutcikm2:reMZ80jkgqsejdLdNQDT/oKhPK5VnA==
 config:
   shared-kafka:env: dev

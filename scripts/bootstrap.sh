@@ -5,81 +5,65 @@ set -euo pipefail
 : "${ENV:=dev}"
 : "${RETAIN:=true}"
 
+  if [ "$RETAIN" == "false" ] && [ -d ".pulumi" ]; then
+    echo 'removing local .pulumi directory...' >&2
+    rm -r '.pulumi/'
+  fi
+
 echo "beginning bootstrapping for \"${ENV}\" environment..." >&2
 
-pulumi login "file://$(pwd)"
-
-pushd bootstrap
-
 export PULUMI_CONFIG_PASSPHRASE=''
-if [ "$RETAIN" == "false" ]; then
-  pulumi destroy --yes --stack "bootstrap-${ENV}" || true
-  pulumi stack rm --force --preserve-config --yes --stack "bootstrap-${ENV}" || true
-fi
-if ! pulumi stack select "bootstrap-${ENV}"; then
-  pulumi stack init --stack "bootstrap-${ENV}"
-fi
-pulumi up --yes --stack "bootstrap-${ENV}"
-
-BUCKET="$(pulumi stack output --stack "bootstrap-${ENV}" 'bucket name')"
-SECRETS_PROVIDER="$(pulumi stack output --stack "bootstrap-${ENV}" 'secrets provider')"
-
-pulumi stack unselect
-unset PULUMI_CONFIG_PASSPHRASE
-
-popd
-
-
-pulumi login "${BUCKET}"
 
 APPLICATIONS=(
-  "ingester"
-  "hashtags"
-  "visualise"
+  "bootstrap"
   "shared-network"
   "shared-kafka"
+  "ingester"
+  "snowflake"
+  "hashtags"
+  "visualise"
 )
+
+BACKEND=''
+SECRETS_PROVIDER=''
 
 for APPLICATION in "${APPLICATIONS[@]}"; do
 
-  DEPLOYMENT="inf"
+  while read -r PULUMI_PROJECT_FILE; do
 
-  if [ ! -f "${APPLICATION}/${DEPLOYMENT}/Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml" ]; then
-    echo "${APPLICATION}/${DEPLOYMENT}/Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml does not exist, skipping..." >&2
-    continue
-  fi
+    pulumi login "${BACKEND:-file://$(pwd)}"
 
-  pushd "${APPLICATION}/${DEPLOYMENT}"
+    DEPLOYMENT="$(basename "$(dirname $PULUMI_PROJECT_FILE)" )"
+    pushd "${APPLICATION}/${DEPLOYMENT}" 2> /dev/null
 
-  if pulumi stack select "${APPLICATION}-${DEPLOYMENT}-${ENV}"; then
-    echo "\"${APPLICATION}-${DEPLOYMENT}-${ENV}\" exists, skipping..." >&2
+    STACK="${APPLICATION}-${DEPLOYMENT}-${ENV}"
+
+    if ! pulumi stack select "${STACK}"; then
+      echo "initialising \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
+      # using sed with backup for GNU & BSD compatability
+      sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
+      rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
+      pulumi stack init \
+        --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}" \
+        --secrets-provider "${SECRETS_PROVIDER:-passphrase}"
+    fi
+
+    if [ -f "./${ENV}.env.sh" ]; then
+      echo "configuring secrets for \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
+      ( source "${ENV}.env.sh" )
+    fi
+
+    if [ "${APPLICATION}" == "bootstrap" ]; then
+      pulumi up --yes
+      BACKEND="$(pulumi stack output --stack "${STACK}" 'pulumi backend' 2>/dev/null || true)"
+      SECRETS_PROVIDER="$(pulumi stack output --stack "${STACK}" 'pulumi secrets provider' 2>/dev/null || true)"
+      echo "${BACKEND} - $SECRETS_PROVIDER"
+    fi 
+
     pulumi stack unselect
-    popd
-    continue
-  fi
+    popd 2>/dev/null
 
-  echo "initialising \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
-  # using sed with backup for GNU & BSD compatability
-  sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
-  rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
-  pulumi stack init \
-    --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}" \
-    --secrets-provider "${SECRETS_PROVIDER}"
-  
-  if [ ! -f "${ENV}.env" ]; then
-    echo "no secrets configured for \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
-    pulumi stack unselect
-    popd
-    continue
-  fi
-
-  echo "configuring secrets for \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
-  while IFS='=' read KEY VALUE; do
-    pulumi config set --secret "$KEY" "$VALUE"
-  done < <(sed -e 's/^[[:space:]]*#.*// ; /^[[:space:]]*$/d' "${ENV}.env" )
-
-  pulumi stack unselect
-  popd
+  done < <(find "$APPLICATION" -not -path '*/.*' -mindepth 2 -maxdepth 2 -name Pulumi.yaml)
 
 done
 
