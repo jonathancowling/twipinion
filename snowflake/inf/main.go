@@ -15,60 +15,6 @@ func main() {
 			return err
 		}
 
-		// TODO move to bootstrap  
-		_, err = snowflake.NewUser(ctx, "user", &snowflake.UserArgs{
-			Comment:            pulumi.String("A user of snowflake."),
-			DefaultRole:        pulumi.String("role1"),
-			DefaultWarehouse:   pulumi.String("warehouse"),
-			Disabled:           pulumi.Bool(false),
-			DisplayName:        pulumi.String("Snowflake User"),
-			Email:              pulumi.String("user@snowflake.example"),
-			FirstName:          pulumi.String("Snowflake"),
-			LastName:           pulumi.String("User"),
-			LoginName:          pulumi.String("snowflake_user"),
-			MustChangePassword: pulumi.Bool(false),
-			Password:           pulumi.String("secret"),
-			RsaPublicKey:       pulumi.String("..."),
-			RsaPublicKey2:      pulumi.String("..."),
-		})
-		if err != nil {
-			return err
-		}
-		_, err = snowflake.NewRole(ctx, "role", &snowflake.RoleArgs{
-			Comment: pulumi.String("A role."),
-		})
-		if err != nil {
-			return err
-		}
-		_, err = snowflake.NewDatabaseGrant(ctx, "grant", &snowflake.DatabaseGrantArgs{
-			DatabaseName: pulumi.String("db"),
-			Privilege:    pulumi.String("USAGE"),
-			Roles: pulumi.StringArray{
-				pulumi.String("role1"),
-				pulumi.String("role2"),
-			},
-			Shares: pulumi.StringArray{
-				pulumi.String("share1"),
-				pulumi.String("share2"),
-			},
-			WithGrantOption: pulumi.Bool(false),
-		})
-		if err != nil {
-			return err
-		}
-		_, err = snowflake.NewRoleGrants(ctx, "grants", &snowflake.RoleGrantsArgs{
-			RoleName: role.Name,
-			Roles: pulumi.StringArray{
-				otherRole.Name,
-			},
-			Users: pulumi.StringArray{
-				user.Name,
-				user2.Name,
-			},
-		})
-		if err != nil {
-			return err
-		}
 		schema, err := snowflake.NewSchema(ctx, "schema", &snowflake.SchemaArgs{
 			Database:          pulumi.String("database"),
 			DataRetentionDays: pulumi.Int(1),

@@ -43,7 +43,6 @@ jobs:
       aws-region: ${{steps.bootstrap-aws.outputs.aws-region}}
       snowflake-account: ${{steps.bootstrap-snowflake.outputs.snowflake-account}}
       snowflake-username: ${{steps.bootstrap-snowflake.outputs.snowflake-login}}
-      snowflake-password: ${{steps.bootstrap-snowflake.outputs.snowflake-password}}
       snowflake-region: ${{steps.bootstrap-aws.outputs.aws-region}}
     env:
       PULUMI_CONFIG_PASSPHRASE: ''
@@ -84,12 +83,6 @@ jobs:
             pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake login'
           )"
 
-          SNOWFLAKE_PASSWORD="$(
-            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake password'
-          )"
-          echo "::add-mask::${SNOWFLAKE_PASSWORD}"
-          echo "::set-output name=snowflake-password::${SNOWFLAKE_PASSWORD}"
-
           echo "::set-output name=snowflake-account::$(
             pulumi config get --stack bootstrap-10_snowflake-${{env.ENV}} snowflake:account
           )"
@@ -116,7 +109,6 @@ jobs:
       SNOWFLAKE_PASSWORD: ${{needs.bootstrap.outputs.snowflake-password}}
       SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
-      - run: base64 <<< '${{needs.bootstrap.outputs.aws-role}}'
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
@@ -151,7 +143,6 @@ jobs:
       AWS_REGION: ${{needs.bootstrap.outputs.aws-region}}
       SNOWFLAKE_USERNAME: ${{needs.bootstrap.outputs.snowflake-username}}
       SNOWFLAKE_ACCOUNT: ${{needs.bootstrap.outputs.snowflake-account}}
-      SNOWFLAKE_PASSWORD: ${{needs.bootstrap.outputs.snowflake-password}}
       SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
       - uses: actions/checkout@v2
@@ -165,7 +156,19 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{needs.bootstrap.outputs.aws-role}}
-          aws-region: ${{needs.bootstrap.outputs.aws-region}}
+          aws-region: ${{env.AWS_REGION}}
+      - name: snowflake secrets
+        run: |
+          pulumi login '${{needs.bootstrap.outputs.cloud-url}} '
+
+          SNOWFLAKE_PASSWORD="$(
+            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake password'
+          )"
+          echo "::add-mask::${SNOWFLAKE_PASSWORD}"
+          echo "SNOWFLAKE_PASSWORD=${SNOWFLAKE_PASSWORD}" >> "${GITHUB_ENV}"
+          
+          pulumi logout
+        working-directory: bootstrap/10_snowflake
       - uses: pulumi/actions@v3
         with:
           command: up

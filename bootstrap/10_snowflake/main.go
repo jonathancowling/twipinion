@@ -17,6 +17,7 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Export("snowflake password", password.Result)
 
 		user, err := snowflake.NewUser(ctx, "ci-user", &snowflake.UserArgs{
 			Comment:            pulumi.String("Snowflake CI user"),
@@ -30,6 +31,8 @@ func main() {
 		if err != nil {
 			return err
 		}
+		ctx.Export("snowflake login", user.LoginName)
+
 		_, err = snowflake.NewRoleGrants(ctx, "ci-role", &snowflake.RoleGrantsArgs{
 			RoleName: pulumi.String("SYSADMIN"),
 			Users: pulumi.StringArray{ user.Name },
@@ -37,9 +40,6 @@ func main() {
 		if err != nil {
 			return err
 		}
-
-		ctx.Export("snowflake login", user.LoginName)
-		ctx.Export("snowflake password", password.Result)
 
 		return nil
 	})
