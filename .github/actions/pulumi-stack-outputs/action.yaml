@@ -20,7 +20,10 @@ runs:
   steps:
     - if: inputs.cloud-url != null
       run: pulumi login ${{ inputs.cloud-url }}
+      shell: bash
     - id: get-outputs
       run: echo "::set-output name=json::$(pulumi stack --stack ${{ inputs.stack }} output --json | tr -d '\n\r\t' )"
+      shell: bash
     - if: inputs.cloud-url != null
       run: pulumi logout
+      shell: bash
