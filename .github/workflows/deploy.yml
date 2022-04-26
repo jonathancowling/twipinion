@@ -48,6 +48,7 @@ jobs:
         with:
           go-version: '^1.16'
       - id: bootstrap-aws
+        uses: pulumi/actions@v3
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
         with:
