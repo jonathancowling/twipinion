@@ -25,8 +25,14 @@ func main() {
 			Email:              pulumi.String("jonathan.cowling+twipinion-ci@infinityworks.com"),
 			FirstName:          pulumi.String("Twipinion"),
 			LastName:           pulumi.String("CI User"),
-			LoginName:          pulumi.String("Twipinion CI User"),
 			Password:       	password.Result,
+		})
+		if err != nil {
+			return err
+		}
+		_, err = snowflake.NewRoleGrants(ctx, "ci-role", &snowflake.RoleGrantsArgs{
+			RoleName: pulumi.String("SYSADMIN"),
+			Users: pulumi.StringArray{ user.Name },
 		})
 		if err != nil {
 			return err
