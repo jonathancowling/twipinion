@@ -86,6 +86,8 @@ jobs:
           echo "::set-output name=snowflake-account::$(
             pulumi config get --stack bootstrap-10_snowflake-${{env.ENV}} snowflake:account
           )"
+
+          echo testing: ${{steps.bootstrap-aws.outputs.aws-role}}
           
           pulumi logout
         working-directory: bootstrap/10_snowflake
