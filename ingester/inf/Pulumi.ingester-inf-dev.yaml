@@ -3,5 +3,5 @@ config:
   aws-native:region: us-east-1
   aws:region: us-east-1
   ingester:TWITTER_BEARER_TOKEN:
-    secure: v1:GDa2Cw8odgO2mdg7:MTtisoOGDBmxCII8BdDd+f3P0nQszCdpG8oLAh1GKZr1iBQf9GK69QOQfy42nLVWet9DCUEad2ZD92otAwyZg3NoCeU39QN7j+vl7GuJFp1XJd72WA+hIBJFrJG9l8K394uy5XcF3E/2s6bvZMLjn+4HITCzSX88LaBdrvshRv2WQA==
+    secure: v1:PMUhjME8dCt9BE9Y:C50wTKAPb/5ebh1sjCObb3kq3M2TRGB9w0WeIkuB44KIJ412LStdNcrwRweuNOAis7hvIcNclx02dG20m00HTJVI2X6xKhBxKN+GmISVWL86AYJQkhCd6a9HpWLGKcCUUSHAN5G+zod/raf1sqQPP3SAnaU6NiaSbWCcL76bc3VuBQ==
   ingester:env: dev
