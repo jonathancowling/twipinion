@@ -92,6 +92,8 @@ jobs:
           
           pulumi logout
         working-directory: bootstrap/10_snowflake
+        env:
+          AWS_REGION: ${{steps.bootstrap-aws.outputs.aws-region}}
 
   shared:
     name: Deploy Shared
@@ -103,6 +105,12 @@ jobs:
         dir:
           - shared-network
           - shared-kafka
+    env:
+      AWS_REGION: ${{needs.bootstrap.outputs.aws-region}}
+      SNOWFLAKE_USERNAME: ${{needs.bootstrap.outputs.snowflake-username}}
+      SNOWFLAKE_ACCOUNT: ${{needs.bootstrap.outputs.snowflake-account}}
+      SNOWFLAKE_PASSWORD: ${{needs.bootstrap.outputs.snowflake-password}}
+      SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -118,7 +126,7 @@ jobs:
           stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
           cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
-          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}} 
+          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}}
 
   applications:
     name: Deploy Applications
@@ -134,12 +142,17 @@ jobs:
           - snowflake
           # - hastags
           # - visualise
+    env:
+      AWS_REGION: ${{needs.bootstrap.outputs.aws-region}}
+      SNOWFLAKE_USERNAME: ${{needs.bootstrap.outputs.snowflake-username}}
+      SNOWFLAKE_ACCOUNT: ${{needs.bootstrap.outputs.snowflake-account}}
+      SNOWFLAKE_PASSWORD: ${{needs.bootstrap.outputs.snowflake-password}}
+      SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16'
-        # this step will trigger a warning for non-application jobs
       - uses: actions/download-artifact@v3
         with:
           name: jar
