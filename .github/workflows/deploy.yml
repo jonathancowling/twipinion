@@ -71,6 +71,10 @@ jobs:
 
           pulumi logout
         working-directory: bootstrap/00_aws
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{steps.bootstrap-aws.outputs.aws-role}}
+          aws-region: ${{steps.bootstrap-aws.outputs.aws-region}}
       - name: set snowflake variables
         id: bootstrap-snowflake
         run: |
