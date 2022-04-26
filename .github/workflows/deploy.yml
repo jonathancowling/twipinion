@@ -48,26 +48,24 @@ jobs:
         with:
           go-version: '^1.16'
       - id: bootstrap-aws
-        uses: pulumi/actions@v3
+        uses: ./pulumi-stack-outputs.yaml
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
         with:
-          command: preview
-          expect-no-changes: true
           cloud-url: 'file://${{github.workspace}}'
           stack-name: bootstrap-00_aws-${{env.ENV}}
           work-dir: ${{github.workspace}}/bootstrap/00_aws/
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{steps.bootstrap-aws.outputs['aws ci role']}}
-          aws-region: ${{ steps.bootstrap-aws.outputs['aws region'] }}
+          role-to-assume: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['aws ci role'] }}
+          aws-region: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['aws region'] }}
       - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
-          cloud-url: ${{steps.bootstrap-aws.outputs['pulumi backend']}} 
-          secrets-provider: ${{steps.bootstrap-aws.outputs['pulumi secrets provider']}}
+          cloud-url: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['pulumi backend'] }} 
+          secrets-provider: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['pulumi secrets provider'] }}
 
   applications:
     name: Deploy Applications
@@ -92,37 +90,34 @@ jobs:
           name: jar
           path: ${{matrix.dir}}/app/target/
       - id: bootstrap-aws
-        uses: pulumi/actions@v3
+        uses: ./pulumi-stack-outputs.yaml
         env:
           PULUMI_CONFIG_PASSPHRASE: ''
         with:
-          command: preview
-          expect-no-changes: true
           cloud-url: 'file://${{github.workspace}}'
           stack-name: bootstrap-00_aws-${{env.ENV}}
           work-dir: ${{github.workspace}}/bootstrap/00_aws/
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{steps.bootstrap-aws.outputs['aws ci role']}}
-          aws-region: ${{steps.bootstrap-aws.outputs['aws region']}}
       - id: bootstrap-snowflake
-        uses: pulumi/actions@v3
+        uses: ./pulumi-stack-outputs.yaml
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ''
         with:
-          command: preview
-          expect-no-changes: true
-          cloud-url: ${{steps.bootstrap-aws.outputs['pulumi backend']}} 
-          secrets-provider: ${{steps.bootstrap-aws.outputs['pulumi secrets provider']}}
+          cloud-url: 'file://${{github.workspace}}'
           stack-name: bootstrap-10_snowflake-${{env.ENV}}
           work-dir: ${{github.workspace}}/bootstrap/10_snowflake/
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['aws ci role'] }}
+          aws-region: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['aws region'] }}
       - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
-          cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
-          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}}
+          cloud-url: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['pulumi backend'] }} 
+          secrets-provider: ${{ fromJSON(steps.bootstrap-aws.outputs.json)['pulumi secrets provider'] }}
         env:
-          SNOWFLAKE_ACCOUNT: ${{steps.bootstrap-snowflake.outputs['snowflake account']}}
-          SNOWFLAKE_USERNAME: ${{steps.bootstrap-snowflake.outputs['snowflake username']}}
-          SNOWFLAKE_PASSWORD: ${{steps.bootstrap-snowflake.outputs['snowflake password']}}
-          SNOWFLAKE_REGION: ${{steps.bootstrap-snowflake.outputs['snowflake region']}}
+          SNOWFLAKE_ACCOUNT: ${{ fromJSON(steps.bootstrap-snowflake.outputs.json)['snowflake account'] }}
+          SNOWFLAKE_USERNAME: ${{ fromJSON(steps.bootstrap-snowflake.outputs.json)['snowflake username'] }}
+          SNOWFLAKE_PASSWORD: ${{ fromJSON(steps.bootstrap-snowflake.outputs.json)['snowflake password'] }}
+          SNOWFLAKE_REGION: ${{ fromJSON(steps.bootstrap-snowflake.outputs.json)['snowflake region'] }}

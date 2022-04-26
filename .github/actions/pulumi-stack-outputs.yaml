@@ -1,0 +1,26 @@
+name: 'Pulumi Stack Outputs'
+description: 'Get pulumi stack outputs'
+inputs:
+  cloud-url:
+    description: Url to use for logging in
+    required: false
+  stack-name: 
+    description: Name of the stack to get outputs from
+    required: true
+  work-dir:
+    description: Working Directory
+    required:  true
+    default: ${{github.workspace}}
+outputs:
+  json:
+    description: "outputs as an object with key value pairs"
+    value: ${{ steps.get-outputs.outputs.json }}
+runs:
+  using: "composite"
+  steps:
+    - if: inputs.cloud-url != null
+      run: pulumi login ${{ inputs.cloud-url }}
+    - id: get-outputs
+      run: echo "::set-output name=json::$(pulumi stack --stack ${{ inputs.stack }} output --json | tr -d '\n\r\t' )"
+    - if: inputs.cloud-url != null
+      run: pulumi logout
