@@ -4,7 +4,7 @@
         "stack": "bootstrap-00_aws-dev",
         "latest": {
             "manifest": {
-                "time": "2022-04-26T10:50:08.939735+01:00",
+                "time": "2022-04-26T14:08:37.374004+01:00",
                 "magic": "f18625eb5592f6d57a3a8c5bfde984fc0808d71ce3f046fd68e1dc4a989f43a7",
                 "version": "v3.30.0"
             },
@@ -15,6 +15,19 @@
                 }
             },
             "resources": [
+                {
+                    "urn": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-00_aws-dev",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "OIDC": "token.actions.githubusercontent.com",
+                        "aws ci role": "arn:aws:iam::921613977667:role/ci-role-5e2e30c",
+                        "aws region": "us-east-1",
+                        "pulumi backend": "s3://backend-bucket-1eeb33e",
+                        "pulumi secrets provider": "awskms://alias/pulumi?region=us-east-1"
+                    },
+                    "sequenceNumber": 1
+                },
                 {
                     "urn": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::pulumi:providers:aws-native::default",
                     "custom": true,
@@ -31,18 +44,6 @@
                     "sequenceNumber": 1
                 },
                 {
-                    "urn": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-00_aws-dev",
-                    "custom": false,
-                    "type": "pulumi:pulumi:Stack",
-                    "outputs": {
-                        "OIDC": "token.actions.githubusercontent.com",
-                        "aws ci role": "arn:aws:iam::921613977667:role/ci-role-5e2e30c",
-                        "pulumi backend": "s3://backend-bucket-1eeb33e",
-                        "pulumi secrets provider": "awskms://alias/pulumi?region=us-east-1"
-                    },
-                    "sequenceNumber": 1
-                },
-                {
                     "urn": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::aws-native:s3:Bucket::backend-bucket",
                     "custom": true,
                     "id": "backend-bucket-1eeb33e",
@@ -53,7 +54,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:oMj9zOgr5kh7pSiw:MzVfbrOQAWSIKug2MWzzsqZos+xoFxwQu+TOS9sSzyxDF3eKjnNduoW708KJ9bipK/LdvO52aQ=="
+                            "ciphertext": "v1:cNzL/L2ZYRO7SELh:IWhMGD4233hbUnauvpGvRF7fe03IYo7QJnVWe3LsUtKSoJRGQeqS4LShEhn89Q47Q72ZZgwdSg=="
                         },
                         "arn": "arn:aws:s3:::backend-bucket-1eeb33e",
                         "bucketName": "backend-bucket-1eeb33e",
@@ -83,7 +84,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:mZjMetbuTTidVw4e:7m93UzAXVWdAlQgOBxvIJtpseNEO7v8zUoRTnqyhK9vjm9eOpKPxCMfjoGpdUpUqhW8eDylSkA/QaJ00NOufqOv+8yWjhJfVtBOKSW7PeuAMxs9C3fIb2aSg58Ffarv+U4lvQZaay3H33n6F6ODkMbA8nEYU2HphrLIOr/6Z8jaf+Yla0U2F9S+WIGxYPDecwoSvzw3bn5lRVIA2O3zliw9DUjnvQjeY"
+                            "ciphertext": "v1:P/PwmXFOFq2IOmqy:T/am9XQWHSWGHtwspdTIs2kOaP1/Vksry25Cix6gauRjK7faMcNC4w/p6Vqxscl72AY8lsM5ehFNny0eFaRiofItlOrmsZXPGJbVHhmN+l2ppHYc77TlMVHZs/TwgAHjzjjQJcWVDEfRQJ2BiCvlFZlhyPgiGQ0z+KPmJFZpi59IF4kM8bjLaI1IJ4kRZysOuWMm2rFGI2gSvGcZi+gBoVFbNUPIrK4O"
                         },
                         "arn": "arn:aws:iam::921613977667:oidc-provider/token.actions.githubusercontent.com",
                         "clientIdList": [
@@ -128,7 +129,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:00F8ViTa07UF7PVs:iZoXpYwECKhJf8fV6xTJIOMvwF8YEzgQQKr2ObaHTKSixFufGyuoZpDuv80h18gd4VChGAz/Ydxo1/w3J0sIjRJr643OypHteJWhRsmN6GLSxFLcrmAEFtgRejWVdc6faTg1kiZCAByQWlf5Nno9lSAZYqtS2eIR1/R/NUMs5YDYaPQ6rf3qa4HwkqKVn20GSnsdiUA1UyiZrEbRTa6QkVkO7YFjhR6KJ71x9srJUTCq2umPjDA5MeryYwZ1/jtUV13oe/xWJNT2OrOu0iEQkjDDtEfnd65fibLqQjd5j9+gztmpnrhoQnu0RtyP+lltcDrFyjildztrWVIyuudbqVz2zsksk89fEVlJ+AyVZ97YeFP96BBV27p5Q4fpX+9MbMCgzLb3GOwTezDIt+ShYGCh4qswLM5Erb/xVl6R4OwZ11a5h3SSxM/AtSAEGwvwCsw8jY2g1fqR4ylJFbPirTMxu51qzyZk3bP+7S90x2se0/CBs51d7v+TC4yJZRqgfiK9D1xU33H8Brp17cwV4JfWrC9K2jmG2FHdw7EWErSpyDHgNHXLrGb9RJvB3GeotZ17M8hGQtlKRRH9O/AclZAt5mW/Y/xIV88r8xcXoTRijPJgnC1S/wtqR2ZNreT/kVu8XfUzBfQOPemgSxlqAQgajMlbfIIqiSslWpsAoj16ipkjU7PL6zQq90YkR9szNREE4PulOf3glgYP4p7ue6aeE9UOx86JbabkeG+XT6qaSmBfm2xov+KC+1osA25KTkbzrrXSefp+PKbPW3MrbMTMzF7ziE1D5zlnGuyP0lmo8tUHR2jvcyk7Zbu9yPlbLNrCCnPTDWLCwcLoAZBA3FVFnrBkQOp6Bk1aI6ifgbgOQJdsMwz4BVUWCeO87D8Vz6UkAOm/9/AjVHW4RpSH/sSFCzREIHsHo/4CoIOp/SlB0od0mH7uY9i3GHC0x61yRs7ClY/+yXtmy5mwFWAfvYKyjryGw5YR54QC7x5SopK8WwggYxN6jOcrSUXEEDTtTG79pqbxtQi2nohneiHNO9rBQX79LBS4E7K+Rz8wA97BaHu22fl3ovWS6whY4XseauME2LExr+szpzRhjBwIeCTg8C5b8/TPD75FMyOIA+kItpqDTpeLAChe2jo4QWtU45LM9vEky5RLYmjoLzKQXfEnoLpM8dsZ+ao6l/Ng0wsofXu7xxPRXm95hoM0o0X8pBUvv2tfeSHAhMBsauzNcVUS8zYdBuIgPm3t8pWiEI5lw/EmVzYDhEBWaZUn0nmpTkKXJsR0I8G2K7JW69/ysKvYIRJ9zqpmlrQEqPYLTpwJExbmktq9h2a+EBVTTh6TvJNRJXqrIn7QuWYPPr4dS/Ly2lTdovu6DET4sr8RmpI3SRMBhvOdkWamZf8J27e/65Uv3UCauqDSTUWi7TyV3Kfwyo8ty0K8Eh6RD6qLWIoQJm54GNgpNm2BArkHQn5BGiV09E1ia9eOH9GyYY3PrWkf7SKXTAdc6SZoXfwIzhc/1T5IbblpTjJ7W4Yz"
+                            "ciphertext": "v1:/QL+rVj0UjwzgwyS:isj0mnuTZGJrDJQEFNwBa5semcyhj+CdkOHI7cOzS/g3YYg46kVdhvS5TPpU1SZXGxOVjBre/bjX+WhEUhD0OybKLo/516yGjfSITJjguuI00Vu3wVapRRsYyXh87lFDfrLoxW/viHI/LzOJNIJSXZAC2uI9BYlD4hR3oZCcrN0YxBKdF4mnABIkutVSMzkESn96CMYCVBQn/s3HzmO1QjFTLshtdjy4Ou6Kft8kDZpHsx0GFRJHFlb2jtgxVyXXkQkn35j8k2NzMieEgdY0nAygaR0BZEn8SiNBUomOUAXpTzN1afYvJXTxFUoKOJlBYdJ/6kXBge+2YVoxubi81qq6oK/6y6cO3Kmqv8qCjnVI9y0H2Yz3ZP/EVNOh4xbHLf5a21wwDODADCTFg5YZnS1pX0yLrkXBYJpL0ZyeYZNJhjEPDmNea8CSoljsz1C1u9JifwTOQs8QSWuTCOIOWflaexIcexFiRN0h2e1QJWVSGW1KZsbZgEtSCD1Xto6zLDHUUhddpYa2c5zj9bX7ugQ4Vvko4HEE3opNysT+V/NlUm4wt6xu26DrI0/PD7jTP6+nsmh0n0UokhlXBkWoXy8gQVKktNSgGEMDVLz6w9argWWkN2R2Dm4OSSSaJuyDosME9TtgU4T2jH0YUR4KRbcG6K2renI0AlQ+ngpDSv5fbUB8g0rzeBxRxwtkcRvsltvkiqlOn9ZsY7azZCFHBgMGQIAaNZQavgM8yN9I0spd5RpMtVreFSEyTl5a5Uq4YjxtyRNhbHMjM/5Jwf3Y2LNzqcjeC4bWCYe6MTKgeHLFk/7kzsWhZOq8/+KzutPnd0yVFLoR2z+/niQK0HBxJYIxvtv70QYHJuT+Z0V6sIeHPUMgAMG2NZ/bgaGkETKWerR4gJ/6PnvQPaU062s50NWj2drHwh2InEvrZUoz5TKG0O6/w4+H73OgglC0RnzgTISNGHrTioDR4x9AatW+LpbIRUHogJMj9X07DXaS2egWnpU0N4pR0m1fzUHEckbBvPcMcaVTWNr9+gtYVSlCLwUBUD2GZplRMPS3KLERK75qpvr5GlW2DOKLWm+I+X+/+MnmqZdQOwYIEVSMUkP8FoEW/eK7Iv4UDUCYqqwadOOulqeux0FHzTOHhYvnB85W/PE+hO8pZ5/j86iJokvTbF0/OG9JeXnnY3OKGvWKDn1NBVDe7HBlD0YcNRy6hnF7kceLkcnuBB0iyycLlyZi69nwQC0hzKKjhQ4Z3WCo+8wBLJzs0SOQ/Ie8gX/Z7iwJKufoIG1xzPtYtbalOU2Yt57QdDzAqPi8ptZ2ZxrNE5FHyDLvUv0n4q7R49mjwTL1RJCqxyvaHd1rhOK0+2RJC2anc9FwUW0udUJsBA69yls5MksgzclBzSrQyAB7shp8uO14bS0JG3EtUPpxUAhkLdwML6CL3fTDeKkORb6R4BlFSJg5v9g7opPS2S3pHYAJcwTfm9ZnhgYYSw4V8O397xHPhhwX/1u6eAW8tlRJK3zOxOjfB/esLTDDDAiP"
                         },
                         "arn": "arn:aws:iam::921613977667:role/ci-role-5e2e30c",
                         "assumeRolePolicyDocument": {
@@ -190,7 +191,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:XNenfGAJnc34st7h:ikLxmHp2vQR7jaHpuPZtUVqckh8FUWyfiI5CBHWeyvXNyphqMGTkGfeKsCwmw9So4VT5m3rOuCN/fN6+yWAfuDw1K0sE+O5i1Yv8dvDrARgDRy9yAzoApmn55h2K3eZLxrazp9qDVIAII4HmpkJF3jsEQYjkkpN1j/4hoeFBzwYqGeDYevjZyIjPGumLeKLgJEUFtXI5CpTFMFPgqdRuEotMK76o4SA+34ZtSpBzcKJ6dMVX78XGcZy+E0wGWs0gmu5IrEtLXNG42cD1a9zkRBB0mCoaowYoGez3ziU81NylsgaMm8kLxJ2qhpZEyg8TbGRLWdBnKZsSd4s/hnZcJSxCHjtxcA0oPkUih9TM8QDvHKxqinc1jGxqq6S4rMk6h0NbKtPc/eOUtlAC"
+                            "ciphertext": "v1:+RVJdEjM699yv+8a:nhOcvyYsDsmT8SpTBmVdcVHzUOUy1PTgqup27TcNKKsUX19FW3UO72z9XQ6UzJUu8wUgthAe6HSaOqgArWILjhyEVen7ysga7WfDabBRkaa6erQbD7lpZJNp89fNSg/2TJHUN6wqv/CpCYqWVE1pam1S6ZiLfxnRidjMsj4P36DdbngBRkz44EHOL0mW7gceDPhw2E2rKEv5yN+xE72HgMvvo5F+nx9OhJfxN9TxuqHHmknOpJMpmNB3KSpVL+9EvBvz82XgoYkMeUNAK7/zb2GfsDp2rWHFx9EmwcEDMwUWP6749kAV/v7B9kRHyFOz7RooYLc19cU9/zGBsgt0YrI0C2SAcqvsDRJDSfGCokF+q9VJyRQK1LVsXbIlybDYEfVzHLOfFNRcujhk"
                         },
                         "arn": "arn:aws:kms:us-east-1:921613977667:key/2dc10658-6810-40b4-b4c6-bdfcf7be464f",
                         "description": "secret key for pulumi",
@@ -219,10 +220,14 @@
                         "tags": []
                     },
                     "parent": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::pulumi:pulumi:Stack::bootstrap-bootstrap-00_aws-dev",
+                    "dependencies": [
+                        "urn:pulumi:bootstrap-00_aws-dev::bootstrap::aws-native:iam:Role::ci-role"
+                    ],
                     "provider": "urn:pulumi:bootstrap-00_aws-dev::bootstrap::pulumi:providers:aws-native::default::e80babe3-b997-4285-92d1-d2a15dbaf159",
                     "propertyDependencies": {
-                        "description": [],
-                        "keyPolicy": []
+                        "keyPolicy": [
+                            "urn:pulumi:bootstrap-00_aws-dev::bootstrap::aws-native:iam:Role::ci-role"
+                        ]
                     },
                     "sequenceNumber": 1
                 },
@@ -238,7 +243,7 @@
                     "outputs": {
                         "__inputs": {
                             "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
-                            "ciphertext": "v1:fk7gl48MnaQpOnjN:d0ewybtqpX/Pbg7lgycnqHpL+dIZe7vHcGJHs3nYsKMjpmfo+ZKNme9XVHf/PQyuOPmn1vrPslGdKkWwIZOxcLnSwbUCxfUziplYPt9a6YbkhcNMLyekNQ1zE3Ba+cyzzg=="
+                            "ciphertext": "v1:FE5foOR7faytHCAd:j0L77hykCiMXm9ubE1oDFloqOq75sj6diEfkytyARhC4AQASXtMo59aAuOkbIKj47E6My2OsJ+dPskxlFEVyHs1DibI4GUZQS9vvnzSEKeEWvjGn6tfBWlAOCGX0gRySUA=="
                         },
                         "aliasName": "alias/pulumi",
                         "targetKeyId": "2dc10658-6810-40b4-b4c6-bdfcf7be464f"

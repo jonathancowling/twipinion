@@ -10,6 +10,13 @@ func main() {
 
 	pulumi.Run(func(ctx *pulumi.Context) error {
 
+		acct, err := snowflake.GetCurrentAccount(ctx)
+		if err != nil {
+			return err
+		}
+		ctx.Export("snowflake account", pulumi.String(acct.Account))
+		ctx.Export("snowflake region", pulumi.String(acct.Region))
+
 		password, err := random.NewRandomPassword(ctx, "password", &random.RandomPasswordArgs{
 			Length:          pulumi.Int(64),
 			Special:         pulumi.Bool(true),
@@ -31,7 +38,7 @@ func main() {
 		if err != nil {
 			return err
 		}
-		ctx.Export("snowflake login", user.LoginName)
+		ctx.Export("snowflake username", user.LoginName)
 
 		_, err = snowflake.NewRoleGrants(ctx, "ci-role", &snowflake.RoleGrantsArgs{
 			RoleName: pulumi.String("SYSADMIN"),

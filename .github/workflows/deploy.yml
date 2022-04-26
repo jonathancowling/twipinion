@@ -33,70 +33,8 @@ jobs:
           name: jar
           path: ${{matrix.dir}}/app/target/${{matrix.dir}}-*-aws.jar
 
-  bootstrap:
-    name: Get Bootstrap Variables
-    runs-on: ubuntu-latest
-    outputs:
-      cloud-url: ${{steps.bootstrap-aws.outputs.cloud-url}}
-      secrets-provider: ${{steps.bootstrap-aws.outputs.secrets-provider}}
-      aws-role: ${{steps.bootstrap-aws.outputs.aws-role}}
-      aws-region: ${{steps.bootstrap-aws.outputs.aws-region}}
-      snowflake-account: ${{steps.bootstrap-snowflake.outputs.snowflake-account}}
-      snowflake-username: ${{steps.bootstrap-snowflake.outputs.snowflake-login}}
-      snowflake-region: ${{steps.bootstrap-aws.outputs.aws-region}}
-    env:
-      PULUMI_CONFIG_PASSPHRASE: ''
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
-      - name: set aws variables
-        id: bootstrap-aws
-        run: |
-          pulumi login 'file://${{github.workspace}}'
-
-          echo "::set-output name=cloud-url::$(
-            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'pulumi backend'
-          )"
-          echo "::set-output name=secrets-provider::$(
-            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'pulumi secrets provider'
-          )"
-          echo "::set-output name=aws-role::$(
-            pulumi stack output --stack bootstrap-00_aws-${{env.ENV}} 'aws ci role'
-          )"
-          echo "::set-output name=aws-region::$(
-            pulumi config get --stack bootstrap-00_aws-${{env.ENV}} aws-native:region ||
-              pulumi config get --stack bootstrap-00_aws-${{env.ENV}} aws:region
-          )"
-
-          pulumi logout
-        working-directory: bootstrap/00_aws
-      - uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{steps.bootstrap-aws.outputs.aws-role}}
-          aws-region: ${{steps.bootstrap-aws.outputs.aws-region}}
-      - name: set snowflake variables
-        id: bootstrap-snowflake
-        run: |
-          pulumi login '${{steps.bootstrap-aws.outputs.cloud-url}}'
-
-          echo "::set-output name=snowflake-login::$(
-            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake login'
-          )"
-
-          echo "::set-output name=snowflake-account::$(
-            pulumi config get --stack bootstrap-10_snowflake-${{env.ENV}} snowflake:account
-          )"
-
-          echo testing: ${{steps.bootstrap-aws.outputs.aws-role}}
-          
-          pulumi logout
-        working-directory: bootstrap/10_snowflake
-        env:
-          AWS_REGION: ${{steps.bootstrap-aws.outputs.aws-region}}
-
   shared:
     name: Deploy Shared
-    needs: bootstrap
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -104,34 +42,36 @@ jobs:
         dir:
           - shared-network
           - shared-kafka
-    env:
-      AWS_REGION: ${{needs.bootstrap.outputs.aws-region}}
-      SNOWFLAKE_USERNAME: ${{needs.bootstrap.outputs.snowflake-username}}
-      SNOWFLAKE_ACCOUNT: ${{needs.bootstrap.outputs.snowflake-account}}
-      SNOWFLAKE_PASSWORD: ${{needs.bootstrap.outputs.snowflake-password}}
-      SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16'
+      - id: bootstrap-aws
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ''
+        with:
+          command: preview
+          expect-no-changes: true
+          cloud-url: 'file://${{github.workspace}}'
+          stack-name: bootstrap-00_aws-${{env.ENV}}
+          work-dir: ${{github.workspace}}/bootstrap/00_aws/
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{needs.bootstrap.outputs.aws-role}}
-          aws-region: ${{needs.bootstrap.outputs.aws-region}}
+          role-to-assume: ${{steps.bootstrap-aws.outputs['aws ci role']}}
+          aws-region: ${{ steps.bootstrap-aws.outputs['aws region'] }}
       - uses: pulumi/actions@v3
         with:
           command: up
           stack-name: ${{matrix.dir}}-inf-${{env.ENV}}
           work-dir: ./${{matrix.dir}}/inf
-          cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
-          secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}}
+          cloud-url: ${{steps.bootstrap-aws.outputs['pulumi backend']}} 
+          secrets-provider: ${{steps.bootstrap-aws.outputs['pulumi secrets provider']}}
 
   applications:
     name: Deploy Applications
     needs:
       - package
-      - bootstrap
       - shared
     runs-on: ubuntu-latest
     strategy:
@@ -141,11 +81,6 @@ jobs:
           - snowflake
           # - hastags
           # - visualise
-    env:
-      AWS_REGION: ${{needs.bootstrap.outputs.aws-region}}
-      SNOWFLAKE_USERNAME: ${{needs.bootstrap.outputs.snowflake-username}}
-      SNOWFLAKE_ACCOUNT: ${{needs.bootstrap.outputs.snowflake-account}}
-      SNOWFLAKE_REGION: ${{needs.bootstrap.outputs.snowflake-region}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -155,22 +90,27 @@ jobs:
         with:
           name: jar
           path: ${{matrix.dir}}/app/target/
+      - id: bootstrap-aws
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ''
+        with:
+          command: preview
+          expect-no-changes: true
+          cloud-url: 'file://${{github.workspace}}'
+          stack-name: bootstrap-00_aws-${{env.ENV}}
+          work-dir: ${{github.workspace}}/bootstrap/00_aws/
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{needs.bootstrap.outputs.aws-role}}
-          aws-region: ${{env.AWS_REGION}}
-      - name: snowflake secrets
-        run: |
-          pulumi login '${{needs.bootstrap.outputs.cloud-url}} '
-
-          SNOWFLAKE_PASSWORD="$(
-            pulumi stack output --stack bootstrap-10_snowflake-${{env.ENV}} 'snowflake password'
-          )"
-          echo "::add-mask::${SNOWFLAKE_PASSWORD}"
-          echo "SNOWFLAKE_PASSWORD=${SNOWFLAKE_PASSWORD}" >> "${GITHUB_ENV}"
-          
-          pulumi logout
-        working-directory: bootstrap/10_snowflake
+          role-to-assume: ${{steps.bootstrap-aws.outputs['aws ci role']}}
+          aws-region: ${{steps.bootstrap-aws.outputs['aws region']}}
+      - id: bootstrap-snowflake
+        with:
+          command: preview
+          expect-no-changes: true
+          cloud-url: ${{steps.bootstrap-aws.outputs['pulumi backend']}} 
+          secrets-provider: ${{steps.bootstrap-aws.outputs['pulumi secrets provider']}}
+          stack-name: bootstrap-10_snowflake-${{env.ENV}}
+          work-dir: ${{github.workspace}}/bootstrap/10_snowflake/
       - uses: pulumi/actions@v3
         with:
           command: up
@@ -178,3 +118,8 @@ jobs:
           work-dir: ./${{matrix.dir}}/inf
           cloud-url: ${{needs.bootstrap.outputs.cloud-url}} 
           secrets-provider: ${{needs.bootstrap.outputs.secrets-provider}}
+        env:
+          SNOWFLAKE_ACCOUNT: ${{steps.bootstrap-snowflake.outputs['snowflake account']}}
+          SNOWFLAKE_USERNAME: ${{steps.bootstrap-snowflake.outputs['snowflake username']}}
+          SNOWFLAKE_PASSWORD: ${{steps.bootstrap-snowflake.outputs['snowflake password']}}
+          SNOWFLAKE_REGION: ${{steps.bootstrap-snowflake.outputs['snowflake region']}}

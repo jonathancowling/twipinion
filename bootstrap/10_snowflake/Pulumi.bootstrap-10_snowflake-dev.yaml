@@ -5,6 +5,6 @@ config:
   bootstrap:repo: jonathancowling/twipinion
   snowflake:account: gzb06656
   snowflake:password:
-    secure: v1:nDPwfiJkdLXb9zqp:Qx491gdgh4g+zZ5yVotSX/NHIq2+sM/FaHFLfWkkK9ZPQv9y9ovFINxkwtp9o47V0pwfdJRD23sctjdDZdjBQbnCwrLsjq4y5buZmU332eE=
+    secure: v1:Kp5Z5C/wREy4APfu:V8mK3WwMdD9tEYLGdLUf7dXcWUKpwqmOLQfR7SXT124rzAVPKiw87qjTtwJmjcOGF/GBsPZgxXPJzEEBwkLLP0yKiWFJWX4xl2czYPgYlEE=
   snowflake:region: us-east-1
   snowflake:username: jonathancowling

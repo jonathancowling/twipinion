@@ -17,18 +17,17 @@ func main() {
 
 		conf := config.New(ctx, "")
 
-		accountId, err := aws.GetAccountId(ctx)
+		region, err := aws.GetRegion(ctx)
 		if err != nil {
 			return err
 		}
+		ctx.Export("aws region", pulumi.String(region.Region))
 
 		bucket, err := s3.NewBucket(ctx, "backend-bucket", nil)
 		if err != nil {
 			return err
 		}
-		ctx.Export("pulumi backend", bucket.BucketName.ApplyT(func(name *string) string {
-			return "s3://" + *name
-		}))
+		ctx.Export("pulumi backend", pulumi.Sprintf("s3://%s", bucket.BucketName.Elem()))
 
 		oidc, err := iam.NewOIDCProvider(
 			ctx,
@@ -85,58 +84,50 @@ func main() {
 		}
 		ctx.Export("aws ci role", ciRole.Arn)
 
-		alias := ciRole.Arn.ApplyT(func (ciRoleArn string) pulumi.Output {
-			out, in, e := ctx.NewOutput()
+		accountId, err := aws.GetAccountId(ctx)
+		if err != nil {
+			return err
+		}
 
-			policy, err := json.Marshal(map[string]interface{}{
-				"Version": "2012-10-17",
-				"Statement": []map[string]interface{}{
-					{
-						"Effect": "Allow",
-						"Principal": map[string]interface{}{
-							"AWS": []string{
-								"arn:aws:iam::" + accountId.AccountId + ":user/cloud_user",
-								ciRoleArn,
-							},
+		template, err := json.Marshal(map[string]interface{}{
+			"Version": "2012-10-17",
+			"Statement": []map[string]interface{}{
+				{
+					"Effect": "Allow",
+					"Principal": map[string]interface{}{
+						"AWS": []string{
+							"arn:aws:iam::" + accountId.AccountId + ":user/cloud_user",
+							"%s",
 						},
-						"Action":   "kms:*",
-						"Resource": "*",
 					},
+					"Action":   "kms:*",
+					"Resource": "*",
 				},
-			})
-			if err != nil {
-				e(err)
-				return out
-			}
-
-			key, err := kms.NewKey(ctx, "secret-key", &kms.KeyArgs{
-				Description: pulumi.String("secret key for pulumi"),
-				KeyPolicy:   pulumi.String(string(policy)),
-			})
-			if err != nil {
-				e(err)
-				return out
-			}
-			alias, err := kms.NewAlias(ctx, "secret-key-alias", &kms.AliasArgs{
-				AliasName:   pulumi.StringPtr("alias/pulumi"),
-				TargetKeyId: key.KeyId,
-			})
-			if err != nil {
-				e(err)
-				return out
-			}
-			region, err := aws.GetRegion(ctx)
-			if err != nil {
-				e(err)
-				return out
-			}
-			
-			in(alias.AliasName.ApplyT(func (a string) string {
-				return "awskms://" + a + "?region=" + region.Region
-			}))
-			return out
+			},
 		})
-		ctx.Export("pulumi secrets provider", alias)
+		if err != nil {
+			return err
+		}
+		policy := pulumi.Sprintf(string(template), ciRole.Arn)
+		key, err := kms.NewKey(ctx, "secret-key", &kms.KeyArgs{
+			Description: pulumi.String("secret key for pulumi"),
+			KeyPolicy:   policy,
+		})
+		if err != nil {
+			return err
+		}
+		alias, err := kms.NewAlias(ctx, "secret-key-alias", &kms.AliasArgs{
+			AliasName:   pulumi.StringPtr("alias/pulumi"),
+			TargetKeyId: key.KeyId,
+		})
+		if err != nil {
+			return err
+		}
+		
+		ctx.Export(
+			"pulumi secrets provider",
+			pulumi.Sprintf("awskms://%s?region=%s", alias.AliasName, region.Region),
+		)
 
 		return nil
 	})
