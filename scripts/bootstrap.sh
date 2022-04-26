@@ -5,11 +5,6 @@ set -euo pipefail
 : "${ENV:=dev}"
 : "${RETAIN:=true}"
 
-  if [ "$RETAIN" == "false" ] && [ -d ".pulumi" ]; then
-    echo 'removing local .pulumi directory...' >&2
-    rm -r '.pulumi/'
-  fi
-
 echo "beginning bootstrapping for \"${ENV}\" environment..." >&2
 
 export PULUMI_CONFIG_PASSPHRASE=''
@@ -40,6 +35,15 @@ for APPLICATION in "${APPLICATIONS[@]}"; do
 
     if ! pulumi stack select "${STACK}"; then
       echo "initialising \"${APPLICATION}-${DEPLOYMENT}-${ENV}\"..." >&2
+      # using sed with backup for GNU & BSD compatability
+      sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
+      rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
+      pulumi stack init \
+        --stack "${APPLICATION}-${DEPLOYMENT}-${ENV}" \
+        --secrets-provider "${SECRETS_PROVIDER:-passphrase}"
+    elif [ "$RETAIN" == "false" ]; then
+      pulumi destroy --yes || true
+      pulumi stack rm --preserve-config --force --yes || true
       # using sed with backup for GNU & BSD compatability
       sed -i '.bak' '/^encryptedkey:/d' "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml"
       rm "Pulumi.${APPLICATION}-${DEPLOYMENT}-${ENV}.yaml.bak"
